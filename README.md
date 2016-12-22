@@ -15,6 +15,9 @@ selects the relay based on the user input from a rotary encoder.<br>
 -- Emergency State --<br>
 clicking the rotary encoder button changes to "Manual Only Mode" and selects the dummy load.<br>
 
+Here is the main Schema:<br>
+![Alt text](https://github.com/4Z1KD/HamSwitch/blob/master/Main%20Schema.PNG)
+
 License: This code is FREE for private use by Amateur Radio Operators<br>
 Created: December 2016<br>
 Design and Code: Gil, 4Z1KD (by request from Dubi, 4Z5DZ)<br>

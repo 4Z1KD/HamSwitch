@@ -16,7 +16,7 @@ selects the relay based on the user input from a rotary encoder.<br>
 clicking the rotary encoder button changes to "Manual Only Mode" and selects the dummy load.<br>
 
 Here is the main Schema:<br>
-![Alt text](/Main%20Schema.PNG)
+![Alt text](/Main%20Schema.PNG?raw=true "HamSwitch Schema")
 
 License: This code is FREE for private use by Amateur Radio Operators<br>
 Created: December 2016<br>

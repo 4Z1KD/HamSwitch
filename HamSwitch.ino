@@ -13,8 +13,7 @@
    selects the relay based on the user input from a rotary encoder.
 
    -- Emergency State --
-   clicking the rotary encoder button has the following behaviour:
-   it changes to "Manual Only Mode" and selects the dummy load.
+   clicking the rotary encoder button changes to "Manual Only Mode" and selects the dummy load.
 
    License: This code is FREE for private use by Amateur Radio Operators
    Created: December 2016
@@ -27,20 +26,20 @@
 //***************************************************** PIN Definition ***********************************************/
 
 //This is a switch between auto and manual modes
-//It is a INPUT_PULLUP pin so by default it is set to 'HIGH' -> this will be 'Auto' Mode
-//In order to change to 'Manual' Mode -> ground this pin (optinally through binary switch)
-int AutoSwitch_PIN = 2; //Only Pin 2 or Pin 3 allowed here!
+//It is a INPUT_PULLUP pin so by default it is set to 'HIGH'
+//In order to change to 'Manual' Mode -> ground this pin temporarily (through toggle switch)
+int ToggleModeSwitch_PIN = 2; //Only Pin 2 or Pin 3 allowed here!
 
-//This is an emergency DummyLoad switch (in manual mode)
-//When pressed, the antenna immediately switches to dummy load
-int EmergencyDummyLoad_PIN = 3; //Only Pin 2 or Pin 3 allowed here!
+//This is an emergency DummyLoad switch
+//When pressed, the antenna immediately switches to manual mode and selects the dummy load
+int EmergencyDummyLoadSwitch_PIN = 3; //Only Pin 2 or Pin 3 allowed here!
 
 //Define Decoder Pins (for Auto mode)
 int Decoder1_PIN_A0 = 4;
 int Decoder1_PIN_A1 = 5;
 int Decoder1_PIN_A2 = 6;
 
-//Pins 8 and 9 are used as Rx and Tx in AltSoftSerial
+//Pins 8 and 9 are used as Rx and Tx in AltSoftSerial to communicate with the radio
 
 //Define Rotary Encoder Pins (for Manual mode)
 int RotaryEncoder_PIN_CLK = 10;
@@ -51,7 +50,7 @@ int AutoMode_GreenLED_PIN = 13;
 
 //***********************************************************************************************************************/
 
-//Members (This is the place to define variables used in the application that should have global scope)
+//Members (This is the place to define variables with global scope used in the application )
 AltSoftSerial radioSerial; //a serial port to the radio (pins: 8-RX ,9-TX)
 boolean stringComplete = false; // A flag that indicate a command has arrived through the serial port
 String inputString = ""; //The raw string of the command
@@ -69,7 +68,7 @@ volatile unsigned long last_micros; //in Auto and Manual interrupts
 volatile unsigned long emergencyDummyLoad_last_micros; // in emergencyDummyLoad interrupts
 volatile unsigned long isr_micros; // in ISR interrupts
 
-volatile bool isAutoChanged = true; //Auto mode change indication flag - used to display a short message
+volatile bool isModeChanged = true; //Selection Mode change flag - used to display a short message only when the mode changes
 volatile bool IsAuto = true; //Auto mode flag
 
 unsigned long previousMillis = 0; // required for delay of CAT command
@@ -92,12 +91,12 @@ void setup() {
   pinMode(AutoMode_RedLED_PIN, OUTPUT);
   pinMode(AutoMode_GreenLED_PIN, OUTPUT);
 
-  pinMode(AutoSwitch_PIN, INPUT_PULLUP);//Allow automatic switching Pin
-  pinMode(EmergencyDummyLoad_PIN, INPUT_PULLUP);//Manual antenna selection confirmation Pin
+  pinMode(ToggleModeSwitch_PIN, INPUT_PULLUP);//Allow automatic switching Pin
+  pinMode(EmergencyDummyLoadSwitch_PIN, INPUT_PULLUP);//Emergency Dummy Load Pin - This is the rotary encoder switch
 
   //Register to interrupts
-  attachInterrupt(digitalPinToInterrupt(AutoSwitch_PIN), ToogleMode, FALLING);
-  attachInterrupt(digitalPinToInterrupt(EmergencyDummyLoad_PIN), EmergencyDummyLoad, FALLING);
+  attachInterrupt(digitalPinToInterrupt(ToggleModeSwitch_PIN), ToggleMode, FALLING);
+  attachInterrupt(digitalPinToInterrupt(EmergencyDummyLoadSwitch_PIN), EmergencyDummyLoad, FALLING);
 
   //set the interrupt msk
   PCICR |= (1 << PCIE0);
@@ -116,7 +115,7 @@ void setup() {
   Log(UserCallsign, 0, 0, 0);
   Log("Ready...", 0, 1, 0);
 
-  IsAuto = digitalRead(AutoSwitch_PIN) == HIGH;
+  IsAuto = true;
   prevSelectedAntenna = -1; //initialize with out of range value for the first print
 
   delay(3000);
@@ -124,16 +123,17 @@ void setup() {
 
 void loop() {
   unsigned long currentMillis = millis();
-
+  //----------------------------------------------------------------------------------------------------------//
+  //if in auto mode, and it is time to send command (every interval) -> write the command to the radioSerial
   if (IsAuto && (currentMillis - previousMillis >= interval)) {
     previousMillis = currentMillis;
-    //request for frequancy
-    //Serial.println("FA;");
     radioSerial.println("FA;");
   }
-  if (isAutoChanged) //Only alert the user if there was a change in state
+  //----------------------------------------------------------------------------------------------------------//
+  //Only alert the user if there was a change in the state
+  if (isModeChanged)
   {
-    isAutoChanged = false; //reset the flag
+    isModeChanged = false; //reset the flag
     if (IsAuto)
     {
       Log("Auto Mode", 0, 0, 0); //display a message
@@ -147,11 +147,14 @@ void loop() {
       analogWrite(AutoMode_RedLED_PIN, 0); //Turn red led off
     }
   }
+  //----------------------------------------------------------------------------------------------------------//
+  //if the antenna was manually changed -> show a short messege
   if (isManualyAnttenaChanged)
   {
     Log("Manual Selection", 0, 0, 0);
     isManualyAnttenaChanged = false;
   }
+  //----------------------------------------------------------------------------------------------------------//
   //if the entire string has arrived -> parse the frequency and reset the input string
   if (stringComplete && IsAuto) //Auto mode
   {
@@ -166,11 +169,14 @@ void loop() {
     inputString = ""; //reset the input string
     stringComplete = false; //reset the complete flag
   }
+  //----------------------------------------------------------------------------------------------------------//
+  //To prevent flickering, only display the selected antenna if there was a change
   if (prevSelectedAntenna != selectedAntenna)
   {
     DisplaySelectedAntenna(selectedAntenna);
     prevSelectedAntenna = selectedAntenna;
   }
+  //----------------------------------------------------------------------------------------------------------//
 }
 
 
@@ -300,19 +306,19 @@ bool ParseRawInput()
 
 //********************************************************* Events ***********************************************************************//
 
-void ToogleMode()
+void ToggleMode()
 {
-  static unsigned long last_ToogleModeInterrupt_time = 0;
-  unsigned long toogleModeInterrupt_time = millis();
+  static unsigned long last_ToggleModeInterrupt_time = 0;
+  unsigned long toggleModeInterrupt_time = millis();
   // If interrupts come faster than 100ms, assume it's a bounce and ignore
-  if (toogleModeInterrupt_time - last_ToogleModeInterrupt_time > 500)
+  if (toggleModeInterrupt_time - last_ToggleModeInterrupt_time > 500)
   {
     inputString = ""; //reset the input string
     stringComplete = false; //reset the complete flag
-    isAutoChanged = true;
+    isModeChanged = true;
     IsAuto = !IsAuto;
   }
-  last_ToogleModeInterrupt_time = toogleModeInterrupt_time;
+  last_ToggleModeInterrupt_time = toggleModeInterrupt_time;
 }
 
 void EmergencyDummyLoad()
@@ -323,7 +329,7 @@ void EmergencyDummyLoad()
   if (emergencyDummyLoadInterrupt_time - last_EmergencyDummyLoadInterrupt_time > 500)
   {
     isManualyAnttenaChanged = true;
-    isAutoChanged = true;
+    isModeChanged = true;
     IsAuto = false;
     Frequency = 0;
     PreviousFrequency = -1;
@@ -355,7 +361,7 @@ ISR(PCINT0_vect) {
         if (selectedAntenna == -1) selectedAntenna = 7;
       }
       isManualyAnttenaChanged = true;
-      isAutoChanged = true;
+      isModeChanged = true;
       IsAuto = false;
       SwitchTo(selectedAntenna);
     }
@@ -407,4 +413,3 @@ void DebugDecoder()
   SwitchTo(7);
   delay(200);
 }
-

@@ -23,6 +23,12 @@ Here is the main Schema:<br>
 ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Main%20Schema.PNG?raw=true "HamSwitch Schema")
 </a>
 
+Here is the Realy Schema:<br>
+<a href="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Relay%20Schema.PNG" target="_blank">
+![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Relay%20Schema.PNG?raw=true "HamSwitch Relay Schema")
+</a>
+
+
 License: This code is FREE for private use by Amateur Radio Operators<br>
 Created: December 2016<br>
 Design and Code: Gil, 4Z1KD (by request from Dubi, 4Z5DZ)<br>

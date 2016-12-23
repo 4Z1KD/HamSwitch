@@ -18,7 +18,7 @@ selects the relay (antenna) based on the user input from the rotary encoder.<br>
 <h3>Emergency Button</h3>
 Clicking the rotary encoder button changes to "Manual Only Mode" and selects the dummy load.<br>
 
-<h3>State persistence</h3>
+<h3>State Persistence</h3>
 Every change in the selected antenna and in the selection mode is saved to the eeprom and loaded when HamSwitch is turned on.
 This way the user gets his HamSwitch just as it was left..
 

@@ -1,5 +1,5 @@
 # HamSwitch
-###Arduino based auto antenna switch
+<h2>Arduino based auto antenna switch</h2>
 
 The hardware is based on an Arduino 'Uno' and a 74HC238 - 3 to 8 Line Decoder chip:<br>
 ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/74HC238.png?raw=true "74HC238 Chip")
@@ -15,7 +15,7 @@ if the user turns the rotary encoder, HamSwitch will change back to "Manual only
 In "Manual Only Mode", the radio input is ignored (The controller does not send CAT requests) and the 3 to 8 decoder<br>
 selects the relay (antenna) based on the user input from the rotary encoder.<br>
 
--- Emergency Button --<br>
+<h3>Emergency Button</h3>
 Clicking the rotary encoder button changes to "Manual Only Mode" and selects the dummy load.<br>
 
 <h3>State persistence</h3>

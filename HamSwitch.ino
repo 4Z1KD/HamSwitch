@@ -1,33 +1,34 @@
 /**************************************************************************
   HamSwitch
   Arduino based auto antenna switch
-  
+
   The hardware is based on an Arduino 'Uno' and a 74HC238 - 3 to 8 Line Decoder chip:
   ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/74HC238.png?raw=true "74HC238 Chip")
-  
+
   The application allows the user to toggle between 2 antenna selection modes:
   1. Automatic + Manual selection (Radio Priority Mode)
   2. Manual selection (Manual Only Mode)
-  
+
   In "Radio Priority Mode", the 3 to 8 decoder selects the relay (antenna)
   based on the frequency input from the radio, while maintaining the user manual selection capability.
   if the user turns the rotary encoder, HamSwitch will change back to "Manual only" mode.
-  
+
   In "Manual Only Mode", the radio input is ignored (The controller does not send CAT requests) and the 3 to 8 decoder
   selects the relay (antenna) based on the user input from the rotary encoder.
-  
+
   -- Emergency Button --
   Clicking the rotary encoder button changes to "Manual Only Mode" and selects the dummy load.
-  
+
   Here is the main Schema:
   ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Main%20Schema.PNG?raw=true "HamSwitch Schema")
-  
+
   License: This code is FREE for private use by Amateur Radio Operators
   Created: December 2016
   Design and Code: Gil, 4Z1KD (by request from Dubi, 4Z5DZ)
 **************************************************************************/
 
 #include <AltSoftSerial.h>
+#include <EEPROM.h>
 #include "DisplayService.h"
 
 //***************************************************** PIN Definition ***********************************************/
@@ -122,8 +123,8 @@ void setup() {
   Log(UserCallsign, 0, 0, 0);
   Log("Ready...", 0, 1, 0);
 
-  IsAuto = true;
   prevSelectedAntenna = -1; //initialize with out of range value for the first print
+  GetFromMemory(); //get the value of the last antenna and the selection mode, before HamSwitch was switched off
 
   delay(3000);
 }
@@ -141,6 +142,7 @@ void loop() {
   if (isModeChanged)
   {
     isModeChanged = false; //reset the flag
+    SaveModeToMemory(IsAuto);
     if (IsAuto)
     {
       Log("Auto Mode", 0, 0, 0); //display a message
@@ -177,11 +179,13 @@ void loop() {
     stringComplete = false; //reset the complete flag
   }
   //----------------------------------------------------------------------------------------------------------//
-  //To prevent flickering, only display the selected antenna if there was a change
+  //To prevent flickering, only display the selected antenna if it was a change
   if (prevSelectedAntenna != selectedAntenna)
   {
     DisplaySelectedAntenna(selectedAntenna);
     prevSelectedAntenna = selectedAntenna;
+    SwitchTo(selectedAntenna);
+    SaveAntennaToMemory(selectedAntenna);
   }
   //----------------------------------------------------------------------------------------------------------//
 }
@@ -370,7 +374,6 @@ ISR(PCINT0_vect) {
       isManualyAnttenaChanged = true;
       isModeChanged = true;
       IsAuto = false;
-      SwitchTo(selectedAntenna);
     }
     //Low to High - just save the new value - the selection only changes on High to Low interrupt.
     else if (prev_channel_value[0] == 0 && PINB & B00000100)
@@ -400,23 +403,24 @@ void serialEvent() {
   }
 }
 
-void DebugDecoder()
+void GetFromMemory()
 {
-  delay(200);
-  SwitchTo(0);
-  delay(200);
-  SwitchTo(1);
-  delay(200);
-  SwitchTo(2);
-  delay(200);
-  SwitchTo(3);
-  delay(200);
-  SwitchTo(4);
-  delay(200);
-  SwitchTo(5);
-  delay(200);
-  SwitchTo(6);
-  delay(200);
-  SwitchTo(7);
-  delay(200);
+  int antenna;
+  bool isAuto;
+  EEPROM.get( 0, antenna);
+  EEPROM.get( sizeof(int), isAuto);
+  if (antenna >= 0 && antenna < 8)
+  {
+    selectedAntenna = antenna;
+  }
+  IsAuto = isAuto;
 }
+void SaveAntennaToMemory(int antenna)
+{
+  EEPROM.put(0, antenna);
+}
+void SaveModeToMemory(bool isAuto)
+{
+  EEPROM.put(sizeof(int), isAuto);
+}
+

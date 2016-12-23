@@ -1,5 +1,5 @@
 # HamSwitch
-<h3>Arduino based auto antenna switch<h3>
+<h3>Arduino based auto antenna switch</h3>
 
 The hardware is based on an Arduino 'Uno' and a 74HC238 - 3 to 8 Line Decoder chip:<br>
 ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/74HC238.png?raw=true "74HC238 Chip")

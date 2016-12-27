@@ -2,7 +2,7 @@
 <h2>Arduino based auto antenna switch</h2>
 
 The hardware is based on an Arduino 'Uno' and a 74HC238 - 3 to 8 Line Decoder chip:<br>
-![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/74HC238.png?raw=true "74HC238 Chip")
+![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/74HC238.png?raw=true "74HC238 Chip")
 
 The application allows the user to toggle between 2 antenna selection modes:<br>
 1. Automatic + Manual selection (Radio Priority Mode)<br>
@@ -23,13 +23,13 @@ Every change in the selected antenna and in the selection mode is saved to the e
 This way the user gets his HamSwitch just as it was left..
 
 Here is the main Schema:<br>
-<a href="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Main%20Schema.PNG" target="_blank">
-![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Main%20Schema.PNG?raw=true "HamSwitch Schema")
+<a href="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/Main%20Schema.PNG" target="_blank">
+![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/Main%20Schema.PNG?raw=true "HamSwitch Schema")
 </a>
 
 Here is the Realy Schema:<br>
-<a href="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Relay%20Schema.PNG" target="_blank">
-![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Relay%20Schema.PNG?raw=true "HamSwitch Relay Schema")
+<a href="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/Relay%20Schema.PNG" target="_blank">
+![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/Relay%20Schema.PNG?raw=true "HamSwitch Relay Schema")
 </a>
 
 **License: This code is FREE for private use by Amateur Radio Operators<br>**

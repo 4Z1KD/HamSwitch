@@ -1,30 +1,41 @@
 /**************************************************************************
-  HamSwitch
-  Arduino based auto antenna switch
+  # HamSwitch
+  <h2>Arduino based auto antenna switch</h2>
 
-  The hardware is based on an Arduino 'Uno' and a 74HC238 - 3 to 8 Line Decoder chip:
+  The hardware is based on an Arduino 'Uno' and a 74HC238 - 3 to 8 Line Decoder chip:<br>
   ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/74HC238.png?raw=true "74HC238 Chip")
 
-  The application allows the user to toggle between 2 antenna selection modes:
-  1. Automatic + Manual selection (Radio Priority Mode)
-  2. Manual selection (Manual Only Mode)
+  The application allows the user to toggle between 2 antenna selection modes:<br>
+  1. Automatic + Manual selection (Radio Priority Mode)<br>
+  2. Manual selection (Manual Only Mode)<br>
 
-  In "Radio Priority Mode", the 3 to 8 decoder selects the relay (antenna)
-  based on the frequency input from the radio, while maintaining the user manual selection capability.
-  if the user turns the rotary encoder, HamSwitch will change back to "Manual only" mode.
+  In "Radio Priority Mode", the 3 to 8 decoder selects the relay (antenna)<br>
+  based on the frequency input from the radio, while maintaining the user manual selection capability.<br>
+  if the user turns the rotary encoder, HamSwitch will change back to "Manual only" mode.<br>
 
-  In "Manual Only Mode", the radio input is ignored (The controller does not send CAT requests) and the 3 to 8 decoder
-  selects the relay (antenna) based on the user input from the rotary encoder.
+  In "Manual Only Mode", the radio input is ignored (The controller does not send CAT requests) and the 3 to 8 decoder<br>
+  selects the relay (antenna) based on the user input from the rotary encoder.<br>
 
-  -- Emergency Button --
-  Clicking the rotary encoder button changes to "Manual Only Mode" and selects the dummy load.
+  <h3>Emergency Button</h3>
+  Clicking the rotary encoder button changes to "Manual Only Mode" and selects the dummy load.<br>
 
-  Here is the main Schema:
+  <h3>State Persistence</h3>
+  Every change in the selected antenna and in the selection mode is saved to the eeprom and loaded when HamSwitch is turned on.
+  This way the user gets his HamSwitch just as it was left..
+
+  Here is the main Schema:<br>
+  <a href="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Main%20Schema.PNG" target="_blank">
   ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Main%20Schema.PNG?raw=true "HamSwitch Schema")
+  </a>
 
-  License: This code is FREE for private use by Amateur Radio Operators
-  Created: December 2016
-  Design and Code: Gil, 4Z1KD (by request from Dubi, 4Z5DZ)
+  Here is the Realy Schema:<br>
+  <a href="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Relay%20Schema.PNG" target="_blank">
+  ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Relay%20Schema.PNG?raw=true "HamSwitch Relay Schema")
+  </a>
+
+**License: This code is FREE for private use by Amateur Radio Operators<br>**
+  Created: December 2016<br>
+  Design and Code: **_Gil, 4Z1KD_** (by request from Dubi, 4Z5DZ)<br>
 **************************************************************************/
 
 #include <AltSoftSerial.h>
@@ -59,7 +70,7 @@ int RotaryEncoder_PIN_DT = 11;
 int AutoMode_RedLED_PIN = 12;
 int AutoMode_GreenLED_PIN = 13;
 
-//***********************************************************************************************************************/
+//************************************************** Members *******************************************************/
 
 //Members (This is the place to define variables with global scope used in the application )
 AltSoftSerial radioSerial; //a serial port to the radio (pins: 8-RX ,9-TX)
@@ -118,14 +129,6 @@ void setup() {
   PCICR |= (1 << PCIE0);
   PCMSK0 |= (1 << PCINT2); //Interrupt on pin10
   PCMSK0 |= (1 << PCINT3); //Interrupt on pin11
-
-  //  lcd.begin(16, 2); // set up the LCD's number of columns and rows
-  //  // Switch on the backlight
-  //  lcd.setBacklightPin(BACKLIGHT_PIN, POSITIVE);
-  //  lcd.setBacklight(HIGH);
-  //  lcd.home (); // go home
-
-
 
   radioSerial.begin(9600);
   Serial.begin(9600); // Open serial communications and wait for port to open:
@@ -205,63 +208,63 @@ void loop() {
 void AutoAntennaSelector()
 {
   //convert to Mhz (this is actually not required, but is just an example of what can be done when you have numeric value instead of string..)
-  float FreqInMHZ = Frequency / 1000000.0;
+  float freqInMHZ = Frequency / 1000000.0;
 
-  int band = FrequencyToBand(FreqInMHZ);
-  
+  int band = FrequencyToBand(freqInMHZ);
+
   for (int i = 0; i < NUM_OF_ANTANNA; i++) {
-    
+
   }
 
-  if (FreqInMHZ >= 1.8 && FreqInMHZ <= 2.0) {
+  if (freqInMHZ >= 1.8 && freqInMHZ <= 2.0) {
     DisplaySelectedBand(160);
     SwitchTo(0);
   }
-  else if (FreqInMHZ >= 3.5 && FreqInMHZ <= 3.8) {
+  else if (freqInMHZ >= 3.5 && freqInMHZ <= 3.8) {
     DisplaySelectedBand(80);
     SwitchTo(3);
   }
-  else if (FreqInMHZ >= 5.35 && FreqInMHZ <= 5.4) {
+  else if (freqInMHZ >= 5.35 && freqInMHZ <= 5.4) {
     DisplaySelectedBand(60);
     SwitchTo(7);
   }
-  else if (FreqInMHZ >= 7.0 && FreqInMHZ <= 7.2) {
+  else if (freqInMHZ >= 7.0 && freqInMHZ <= 7.2) {
     DisplaySelectedBand(40);
     SwitchTo(2);
   }
-  else if (FreqInMHZ >= 10.1 && FreqInMHZ <= 10.15) {
+  else if (freqInMHZ >= 10.1 && freqInMHZ <= 10.15) {
     DisplaySelectedBand(30);
     SwitchTo(0);
   }
-  else if (FreqInMHZ >= 14.0 && FreqInMHZ <= 14.35) {
+  else if (freqInMHZ >= 14.0 && freqInMHZ <= 14.35) {
     DisplaySelectedBand(20);
     SwitchTo(1);
   }
-  else if (FreqInMHZ >= 18.06 && FreqInMHZ <= 18.17) {
+  else if (freqInMHZ >= 18.06 && freqInMHZ <= 18.17) {
     DisplaySelectedBand(17);
     SwitchTo(5);
   }
-  else if (FreqInMHZ >= 21.0 && FreqInMHZ <= 21.45) {
+  else if (freqInMHZ >= 21.0 && freqInMHZ <= 21.45) {
     DisplaySelectedBand(15);
     SwitchTo(1);
   }
-  else if (FreqInMHZ >= 24.89 && FreqInMHZ <= 24.99) {
+  else if (freqInMHZ >= 24.89 && freqInMHZ <= 24.99) {
     DisplaySelectedBand(12);
     SwitchTo(0);
   }
-  else if (FreqInMHZ >= 28.0 && FreqInMHZ <= 29.7) {
+  else if (freqInMHZ >= 28.0 && freqInMHZ <= 29.7) {
     DisplaySelectedBand(10);
     SwitchTo(1);
   }
-  else if (FreqInMHZ >= 50.0 && FreqInMHZ <= 50.4) {
+  else if (freqInMHZ >= 50.0 && freqInMHZ <= 50.4) {
     DisplaySelectedBand(6);
     SwitchTo(4);
   }
-  else if (FreqInMHZ >= 144.0 && FreqInMHZ <= 146.0) {
+  else if (freqInMHZ >= 144.0 && freqInMHZ <= 146.0) {
     DisplaySelectedBand(2);
     SwitchTo(0);
   }
-  else if (FreqInMHZ >= 430.0 && FreqInMHZ <= 440.0) {
+  else if (freqInMHZ >= 430.0 && freqInMHZ <= 440.0) {
     DisplaySelectedBand(430);
     SwitchTo(0);
   }
@@ -495,46 +498,46 @@ void SaveModeToMemory(bool isAuto)
   EEPROM.put(sizeof(int), isAuto);
 }
 
-int FrequencyToBand(float FreqInMHZ)
+int FrequencyToBand(float freqInMHZ)
 {
-  
-  if (FreqInMHZ >= 1.8 && FreqInMHZ <= 2.0) {
+
+  if (freqInMHZ >= 1.8 && freqInMHZ <= 2.0) {
     return 160;
   }
-  else if (FreqInMHZ >= 3.5 && FreqInMHZ <= 3.8) {
+  else if (freqInMHZ >= 3.5 && freqInMHZ <= 3.8) {
     return 80;
   }
-  else if (FreqInMHZ >= 5.35 && FreqInMHZ <= 5.4) {
+  else if (freqInMHZ >= 5.35 && freqInMHZ <= 5.4) {
     return 60;
   }
-  else if (FreqInMHZ >= 7.0 && FreqInMHZ <= 7.2) {
+  else if (freqInMHZ >= 7.0 && freqInMHZ <= 7.2) {
     return 40;
   }
-  else if (FreqInMHZ >= 10.1 && FreqInMHZ <= 10.15) {
+  else if (freqInMHZ >= 10.1 && freqInMHZ <= 10.15) {
     return 30;
   }
-  else if (FreqInMHZ >= 14.0 && FreqInMHZ <= 14.35) {
+  else if (freqInMHZ >= 14.0 && freqInMHZ <= 14.35) {
     return 20;
   }
-  else if (FreqInMHZ >= 18.06 && FreqInMHZ <= 18.17) {
+  else if (freqInMHZ >= 18.06 && freqInMHZ <= 18.17) {
     return 17;
   }
-  else if (FreqInMHZ >= 21.0 && FreqInMHZ <= 21.45) {
+  else if (freqInMHZ >= 21.0 && freqInMHZ <= 21.45) {
     return 15;
   }
-  else if (FreqInMHZ >= 24.89 && FreqInMHZ <= 24.99) {
+  else if (freqInMHZ >= 24.89 && freqInMHZ <= 24.99) {
     return 12;
   }
-  else if (FreqInMHZ >= 28.0 && FreqInMHZ <= 29.7) {
+  else if (freqInMHZ >= 28.0 && freqInMHZ <= 29.7) {
     return 10;
   }
-  else if (FreqInMHZ >= 50.0 && FreqInMHZ <= 50.4) {
+  else if (freqInMHZ >= 50.0 && freqInMHZ <= 50.4) {
     return 6;
   }
-  else if (FreqInMHZ >= 144.0 && FreqInMHZ <= 146.0) {
+  else if (freqInMHZ >= 144.0 && freqInMHZ <= 146.0) {
     return 2;
   }
-  else if (FreqInMHZ >= 430.0 && FreqInMHZ <= 440.0) {
+  else if (freqInMHZ >= 430.0 && freqInMHZ <= 440.0) {
     return 430;
   }
   else {

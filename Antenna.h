@@ -9,7 +9,7 @@ class Antenna
   public:
     Antenna(String port, SimpleList<int> bands, String description);
     String GetPort();
-    SimpleList<int> GetBands();
+    SimpleList<int>* GetBands();
     String GetDescription();
   private:
     String m_Port;

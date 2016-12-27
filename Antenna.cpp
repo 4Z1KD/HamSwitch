@@ -14,9 +14,9 @@ String Antenna::GetPort()
   return m_Port;
 }
 
-SimpleList<int> Antenna::GetBands()
+SimpleList<int>* Antenna::GetBands()
 {
-  return m_Bands;
+  return &m_Bands;
 }
 
 String Antenna::GetDescription()

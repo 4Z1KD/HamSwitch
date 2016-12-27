@@ -208,72 +208,35 @@ void loop() {
 //**************************************************************** Antenna Selection *****************************************************************//
 void AutoAntennaSelector()
 {
-  //kuku
   //convert to Mhz (this is actually not required, but is just an example of what can be done when you have numeric value instead of string..)
   float freqInMHZ = Frequency / 1000000.0;
 
-  int band = FrequencyToBand(freqInMHZ);
-
-  for (int i = 0; i < NUM_OF_ANTANNA; i++) {
-    SimpleList<int> mybands(myAntennas.AntennaList[i]->GetBands());
-  }
-
-  if (freqInMHZ >= 1.8 && freqInMHZ <= 2.0) {
-    DisplaySelectedBand(160);
+  int band = FrequencyToBand(freqInMHZ); //Figure out what is the band equivalent of this frequency
+  if (band == 0) //make sure it is on the HAM bands
+  {
+    dispServe.Log("Non HAM Freq", 0, 0, 0);
     SwitchTo(0);
   }
-  else if (freqInMHZ >= 3.5 && freqInMHZ <= 3.8) {
-    DisplaySelectedBand(80);
-    SwitchTo(3);
+  else //if it is
+  {
+    //iterate over the antenna list
+    for (int i = 0; i < NUM_OF_ANTANNA; i++) {
+      SimpleList<int>* mybands = myAntennas.AntennaList[i]->GetBands();
+      //and for each antenna, iterate over the bands it supports
+      for (SimpleList<int>::iterator itr = mybands->begin(); itr != mybands->end(); ++itr)
+      {
+        //if you find a match i.e. the antenna supports the selected band
+        if (*itr == band)
+        {
+          dispServe.Log(String(band) + "M Band", 0, 0, 0); //display the selected band
+          SwitchTo(i); //and switch to that antenna
+          return;
+        }
+      }
+    }
   }
-  else if (freqInMHZ >= 5.35 && freqInMHZ <= 5.4) {
-    DisplaySelectedBand(60);
-    SwitchTo(7);
-  }
-  else if (freqInMHZ >= 7.0 && freqInMHZ <= 7.2) {
-    DisplaySelectedBand(40);
-    SwitchTo(2);
-  }
-  else if (freqInMHZ >= 10.1 && freqInMHZ <= 10.15) {
-    DisplaySelectedBand(30);
-    SwitchTo(0);
-  }
-  else if (freqInMHZ >= 14.0 && freqInMHZ <= 14.35) {
-    DisplaySelectedBand(20);
-    SwitchTo(1);
-  }
-  else if (freqInMHZ >= 18.06 && freqInMHZ <= 18.17) {
-    DisplaySelectedBand(17);
-    SwitchTo(5);
-  }
-  else if (freqInMHZ >= 21.0 && freqInMHZ <= 21.45) {
-    DisplaySelectedBand(15);
-    SwitchTo(1);
-  }
-  else if (freqInMHZ >= 24.89 && freqInMHZ <= 24.99) {
-    DisplaySelectedBand(12);
-    SwitchTo(0);
-  }
-  else if (freqInMHZ >= 28.0 && freqInMHZ <= 29.7) {
-    DisplaySelectedBand(10);
-    SwitchTo(1);
-  }
-  else if (freqInMHZ >= 50.0 && freqInMHZ <= 50.4) {
-    DisplaySelectedBand(6);
-    SwitchTo(4);
-  }
-  else if (freqInMHZ >= 144.0 && freqInMHZ <= 146.0) {
-    DisplaySelectedBand(2);
-    SwitchTo(0);
-  }
-  else if (freqInMHZ >= 430.0 && freqInMHZ <= 440.0) {
-    DisplaySelectedBand(430);
-    SwitchTo(0);
-  }
-  else {
-    DisplaySelectedBand(0);
-    SwitchTo(0);
-  }
+  dispServe.Log("No ant for " + String(band) + "M", 0, 0, 0);
+  SwitchTo(0);
 }
 
 //********************************************************************************************************************************************//
@@ -406,55 +369,6 @@ ISR(PCINT0_vect) {
 }
 //************************************************* Display ************************************************************************//
 
-void DisplaySelectedBand(int band)
-{
-  switch (band)
-  {
-    case 160:
-      dispServe.Log("160M Band", 0, 0, 0);
-      break;
-    case 80:
-      dispServe.Log("80M Band", 0, 0, 0);
-      break;
-    case 60:
-      dispServe.Log("60M Band", 0, 0, 0);
-      break;
-    case 40:
-      dispServe.Log("40M Band", 0, 0, 0);
-      break;
-    case 30:
-      dispServe.Log("30M Band", 0, 0, 0);
-      break;
-    case 20:
-      dispServe.Log("20M Band", 0, 0, 0);
-      break;
-    case 17:
-      dispServe.Log("17M Band", 0, 0, 0);
-      break;
-    case 15:
-      dispServe.Log("15M Band", 0, 0, 0);
-      break;
-    case 12:
-      dispServe.Log("12M Band", 0, 0, 0);
-      break;
-    case 10:
-      dispServe.Log("10M Band", 0, 0, 0);
-      break;
-    case 6:
-      dispServe.Log("6M Band", 0, 0, 0);
-      break;
-    case 2:
-      dispServe.Log("2M Band", 0, 0, 0);
-      break;
-    case 430:
-      dispServe.Log("70CM Band", 0, 0, 0);
-      break;
-    default:
-      dispServe.Log("Non HAM Freq", 0, 0, 0);
-      break;
-  }
-}
-
 void DisplaySelectedAntenna(int antenna)
 {
   dispServe.Log("ANT" + myAntennas.AntennaList[antenna]->GetPort() + " - " + myAntennas.AntennaList[antenna]->GetDescription(), 0, 1, 0);
@@ -466,9 +380,9 @@ void DisplaySelectedAntenna(int antenna)
 //if it gets a semicoloumn (';') - that indicates the end of a data chunk - it sets the 'stringComplete' to true
 //so the main loop can do its work only on a complete data chunks.
 void serialEvent() {
-  while (radioSerial.available()) {
+  while (Serial.available()) {
     // get the new byte:
-    char inChar = (char)radioSerial.read();
+    char inChar = (char)Serial.read();
     // add it to the inputString:
     inputString += inChar;
     // if the incoming character is semicoloumn, set the flag
@@ -478,6 +392,19 @@ void serialEvent() {
     }
   }
 }
+//void serialEvent() {
+//  while (radioSerial.available()) {
+//    // get the new byte:
+//    char inChar = (char)radioSerial.read();
+//    // add it to the inputString:
+//    inputString += inChar;
+//    // if the incoming character is semicoloumn, set the flag
+//    if (inChar == ';') {
+//      inputString.trim(); //trim the string
+//      stringComplete = true;
+//    }
+//  }
+//}
 
 void GetFromMemory()
 {

@@ -1,3 +1,7 @@
+/*
+  DisplayService.cpp - A library for printing text to lcd
+  Created by Gil 4Z1KD, December 24, 2016.
+*/
 #include "Arduino.h"
 #include "DisplayService.h"
 #include <LiquidCrystal_I2C.h>

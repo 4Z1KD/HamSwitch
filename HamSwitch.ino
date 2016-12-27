@@ -102,12 +102,12 @@ String UserCallsign = "YOUR CALLSIGN";
 
 LiquidCrystal_I2C lcdx(I2C_ADDR, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin);
 DisplayService dispServe(&lcdx);
-MyAntennaList myAntennas;
 
 //**************************************************************** setup / loop ********************************************************************//
 void setup() {
   dispServe.Init();
-
+  InitAntennaList();
+  
   //set Decoder Pin modes
   pinMode(Decoder1_PIN_A0, OUTPUT);
   pinMode(Decoder1_PIN_A1, OUTPUT);
@@ -221,7 +221,7 @@ void AutoAntennaSelector()
   {
     //iterate over the antenna list
     for (int i = 0; i < NUM_OF_ANTANNA; i++) {
-      SimpleList<int>* mybands = myAntennas.AntennaList[i]->GetBands();
+      SimpleList<int>* mybands = AntennaList[i]->GetBands();
       //and for each antenna, iterate over the bands it supports
       for (SimpleList<int>::iterator itr = mybands->begin(); itr != mybands->end(); ++itr)
       {
@@ -371,7 +371,7 @@ ISR(PCINT0_vect) {
 
 void DisplaySelectedAntenna(int antenna)
 {
-  dispServe.Log("ANT" + myAntennas.AntennaList[antenna]->GetPort() + " - " + myAntennas.AntennaList[antenna]->GetDescription(), 0, 1, 0);
+  dispServe.Log("ANT" + AntennaList[antenna]->GetPort() + " - " + AntennaList[antenna]->GetDescription(), 0, 1, 0);
 }
 
 //*************************************************************************************************************************//

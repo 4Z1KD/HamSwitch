@@ -30,6 +30,9 @@
 #include <AltSoftSerial.h>
 #include <EEPROM.h>
 #include "DisplayService.h"
+#include "Antenna.h"
+#include "MyAntennaList.h"
+#include <LiquidCrystal_I2C.h>
 
 //***************************************************** PIN Definition ***********************************************/
 
@@ -85,8 +88,13 @@ const long interval = 1000; // delay interval (milliseconds)
 bool IS_DEBUG = false; //debug flag
 String UserCallsign = "YOUR CALLSIGN";
 
+LiquidCrystal_I2C lcdx(I2C_ADDR, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin);
+DisplayService dispServe(&lcdx);
+MyAntennaList myAntennas;
+
 //**************************************************************** setup / loop ********************************************************************//
 void setup() {
+  dispServe.Init();
 
   //set Decoder Pin modes
   pinMode(Decoder1_PIN_A0, OUTPUT);
@@ -111,17 +119,19 @@ void setup() {
   PCMSK0 |= (1 << PCINT2); //Interrupt on pin10
   PCMSK0 |= (1 << PCINT3); //Interrupt on pin11
 
-  lcd.begin(16, 2); // set up the LCD's number of columns and rows
-  // Switch on the backlight
-  lcd.setBacklightPin(BACKLIGHT_PIN, POSITIVE);
-  lcd.setBacklight(HIGH);
-  lcd.home (); // go home
+  //  lcd.begin(16, 2); // set up the LCD's number of columns and rows
+  //  // Switch on the backlight
+  //  lcd.setBacklightPin(BACKLIGHT_PIN, POSITIVE);
+  //  lcd.setBacklight(HIGH);
+  //  lcd.home (); // go home
+
+
 
   radioSerial.begin(9600);
   Serial.begin(9600); // Open serial communications and wait for port to open:
   while (!Serial) {}
-  Log(UserCallsign, 0, 0, 0);
-  Log("Ready...", 0, 1, 0);
+  dispServe.Log(UserCallsign, 0, 0, 0);
+  dispServe.Log("Ready...", 0, 1, 0);
 
   prevSelectedAntenna = -1; //initialize with out of range value for the first print
   GetFromMemory(); //get the value of the last antenna and the selection mode, before HamSwitch was switched off
@@ -145,13 +155,13 @@ void loop() {
     SaveModeToMemory(IsAuto);
     if (IsAuto)
     {
-      Log("Auto Mode", 0, 0, 0); //display a message
+      dispServe.Log("Auto Mode", 0, 0, 0); //display a message
       analogWrite(AutoMode_GreenLED_PIN, 0); //Turn green led off
       analogWrite(AutoMode_RedLED_PIN, 130); //Turn red led on
     }
     else
     {
-      Log("Manual Mode Only", 0, 0, 0);
+      dispServe.Log("Manual Mode Only", 0, 0, 0);
       analogWrite(AutoMode_GreenLED_PIN, 130); //Turn green led on
       analogWrite(AutoMode_RedLED_PIN, 0); //Turn red led off
     }
@@ -160,7 +170,7 @@ void loop() {
   //if the antenna was manually changed -> show a short messege
   if (isManualyAnttenaChanged)
   {
-    Log("Manual Selection", 0, 0, 0);
+    dispServe.Log("Manual Selection", 0, 0, 0);
     isManualyAnttenaChanged = false;
   }
   //----------------------------------------------------------------------------------------------------------//
@@ -196,6 +206,12 @@ void AutoAntennaSelector()
 {
   //convert to Mhz (this is actually not required, but is just an example of what can be done when you have numeric value instead of string..)
   float FreqInMHZ = Frequency / 1000000.0;
+
+  int band = FrequencyToBand(FreqInMHZ);
+  
+  for (int i = 0; i < NUM_OF_ANTANNA; i++) {
+    
+  }
 
   if (FreqInMHZ >= 1.8 && FreqInMHZ <= 2.0) {
     DisplaySelectedBand(160);
@@ -383,8 +399,63 @@ ISR(PCINT0_vect) {
   }
   last_interrupt_time = interrupt_time;
 }
-//********************************************************************************************************************************************//
+//************************************************* Display ************************************************************************//
 
+void DisplaySelectedBand(int band)
+{
+  switch (band)
+  {
+    case 160:
+      dispServe.Log("160M Band", 0, 0, 0);
+      break;
+    case 80:
+      dispServe.Log("80M Band", 0, 0, 0);
+      break;
+    case 60:
+      dispServe.Log("60M Band", 0, 0, 0);
+      break;
+    case 40:
+      dispServe.Log("40M Band", 0, 0, 0);
+      break;
+    case 30:
+      dispServe.Log("30M Band", 0, 0, 0);
+      break;
+    case 20:
+      dispServe.Log("20M Band", 0, 0, 0);
+      break;
+    case 17:
+      dispServe.Log("17M Band", 0, 0, 0);
+      break;
+    case 15:
+      dispServe.Log("15M Band", 0, 0, 0);
+      break;
+    case 12:
+      dispServe.Log("12M Band", 0, 0, 0);
+      break;
+    case 10:
+      dispServe.Log("10M Band", 0, 0, 0);
+      break;
+    case 6:
+      dispServe.Log("6M Band", 0, 0, 0);
+      break;
+    case 2:
+      dispServe.Log("2M Band", 0, 0, 0);
+      break;
+    case 430:
+      dispServe.Log("70CM Band", 0, 0, 0);
+      break;
+    default:
+      dispServe.Log("Non HAM Freq", 0, 0, 0);
+      break;
+  }
+}
+
+void DisplaySelectedAntenna(int antenna)
+{
+  dispServe.Log("ANT" + myAntennas.AntennaList[antenna]->GetPort() + " - " + myAntennas.AntennaList[antenna]->GetDescription(), 0, 1, 0);
+}
+
+//*************************************************************************************************************************//
 //This method executes between every loop execution and monitors the Serial stream
 //If the stream is not empty - it reads all the data from the stream until it is empty
 //if it gets a semicoloumn (';') - that indicates the end of a data chunk - it sets the 'stringComplete' to true
@@ -422,5 +493,52 @@ void SaveAntennaToMemory(int antenna)
 void SaveModeToMemory(bool isAuto)
 {
   EEPROM.put(sizeof(int), isAuto);
+}
+
+int FrequencyToBand(float FreqInMHZ)
+{
+  
+  if (FreqInMHZ >= 1.8 && FreqInMHZ <= 2.0) {
+    return 160;
+  }
+  else if (FreqInMHZ >= 3.5 && FreqInMHZ <= 3.8) {
+    return 80;
+  }
+  else if (FreqInMHZ >= 5.35 && FreqInMHZ <= 5.4) {
+    return 60;
+  }
+  else if (FreqInMHZ >= 7.0 && FreqInMHZ <= 7.2) {
+    return 40;
+  }
+  else if (FreqInMHZ >= 10.1 && FreqInMHZ <= 10.15) {
+    return 30;
+  }
+  else if (FreqInMHZ >= 14.0 && FreqInMHZ <= 14.35) {
+    return 20;
+  }
+  else if (FreqInMHZ >= 18.06 && FreqInMHZ <= 18.17) {
+    return 17;
+  }
+  else if (FreqInMHZ >= 21.0 && FreqInMHZ <= 21.45) {
+    return 15;
+  }
+  else if (FreqInMHZ >= 24.89 && FreqInMHZ <= 24.99) {
+    return 12;
+  }
+  else if (FreqInMHZ >= 28.0 && FreqInMHZ <= 29.7) {
+    return 10;
+  }
+  else if (FreqInMHZ >= 50.0 && FreqInMHZ <= 50.4) {
+    return 6;
+  }
+  else if (FreqInMHZ >= 144.0 && FreqInMHZ <= 146.0) {
+    return 2;
+  }
+  else if (FreqInMHZ >= 430.0 && FreqInMHZ <= 440.0) {
+    return 430;
+  }
+  else {
+    return 0;
+  }
 }
 

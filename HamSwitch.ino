@@ -44,6 +44,7 @@
 #include "Antenna.h"
 #include "MyAntennaList.h"
 #include <LiquidCrystal_I2C.h>
+#include <SimpleList.h>
 
 //***************************************************** PIN Definition ***********************************************/
 
@@ -213,9 +214,9 @@ void AutoAntennaSelector()
 
   int band = FrequencyToBand(freqInMHZ);
 
-//  for (int i = 0; i < NUM_OF_ANTANNA; i++) {
-//    if (myAntennas.AntennaList[i]->GetBand())
-//  }
+  for (int i = 0; i < NUM_OF_ANTANNA; i++) {
+    SimpleList<int> mybands(myAntennas.AntennaList[i]->GetBands());
+  }
 
   if (freqInMHZ >= 1.8 && freqInMHZ <= 2.0) {
     DisplaySelectedBand(160);

@@ -207,14 +207,15 @@ void loop() {
 //**************************************************************** Antenna Selection *****************************************************************//
 void AutoAntennaSelector()
 {
+  //kuku
   //convert to Mhz (this is actually not required, but is just an example of what can be done when you have numeric value instead of string..)
   float freqInMHZ = Frequency / 1000000.0;
 
   int band = FrequencyToBand(freqInMHZ);
 
-  for (int i = 0; i < NUM_OF_ANTANNA; i++) {
-
-  }
+//  for (int i = 0; i < NUM_OF_ANTANNA; i++) {
+//    if (myAntennas.AntennaList[i]->GetBand())
+//  }
 
   if (freqInMHZ >= 1.8 && freqInMHZ <= 2.0) {
     DisplaySelectedBand(160);

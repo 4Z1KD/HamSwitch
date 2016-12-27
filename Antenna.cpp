@@ -1,10 +1,11 @@
 #include "Arduino.h"
 #include "Antenna.h"
+#include <SimpleList.h>
 
-Antenna::Antenna(String port, int* band, String description)
+Antenna::Antenna(String port, SimpleList<int> bands, String description)
 {
   m_Port = port;
-  m_Band = band;
+  m_Bands = bands;
   m_Description = description;
 }
 
@@ -13,9 +14,9 @@ String Antenna::GetPort()
   return m_Port;
 }
 
-int* Antenna::GetBand()
+SimpleList<int> Antenna::GetBands()
 {
-  return m_Band;
+  return m_Bands;
 }
 
 String Antenna::GetDescription()

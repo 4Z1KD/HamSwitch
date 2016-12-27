@@ -2,17 +2,18 @@
 #define Antenna_h
 
 #include "Arduino.h"
+#include <SimpleList.h>
 
 class Antenna
 {
   public:
-    Antenna(String port, int* band, String description);
+    Antenna(String port, SimpleList<int> bands, String description);
     String GetPort();
-    int* GetBand();
+    SimpleList<int> GetBands();
     String GetDescription();
   private:
     String m_Port;
-    int* m_Band;
+    SimpleList<int> m_Bands;
     String m_Description;
 };
 

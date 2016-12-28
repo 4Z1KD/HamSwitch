@@ -51,7 +51,7 @@ Port 0 is **always** the Dummy Load - **Do not change that!**<br>
 In order to define the band list, just create a *SimpleList* object.<br>
 Use *push_back(int)* to add the band to the list.<br>
 
-Here is an example of how to define a 3 bands (20,15,10) KLM kt-34xa antenna:<br>
+Here is an example of how to define a 3 bands (20,15,10) KLM kt-34xa antenna on port 1:<br>
 ```
 SimpleList<int> ant1_BandList;
 ant1_BandList.push_back(20);

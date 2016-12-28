@@ -53,7 +53,8 @@ All you have to do is to define your list of antennas<br>
 **Description** - a friendly name e.g. 'Dipole 40'.<br>
 
 If you open **MyAntennaList.h** you'll find a declaration of an array called *AntennaList*.<br>
-This is an array of *Antenna* type objects.<br>
+This is an array of *Antenna* type objects.
+
 ```javascript
 Antenna* AntennaList[NUM_OF_ANTANNAS];
 ```

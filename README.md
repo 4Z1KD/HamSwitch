@@ -6,7 +6,7 @@ Arduino 'Uno'|74HC238 - 3 to 8 Line Decoder chip|Rotary Encoder
 --------|--------|--------
 ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/arduino uno.png?raw=true "Arduino UNO")|![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/74HC238.png?raw=true "74HC238 Chip")|![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/rotary encoder.jpg?raw=true "rotary encoder")
 
-<h3>Application</h3>
+###Application
 The application allows the user to toggle between 2 antenna selection modes:<br>
 1. Automatic + Manual selection (Radio Priority Mode)<br>
 2. Manual selection (Manual Only Mode)<br>

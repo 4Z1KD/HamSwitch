@@ -53,11 +53,11 @@ Use *push_back(int)* to add the band to the list.<br>
 
 Here is an example of how to define a 3 bands (20,15,10) KLM kt-34xa antenna on port 1:<br>
 `
-SimpleList<int> ant1_BandList;
-ant1_BandList.push_back(20);
-ant1_BandList.push_back(15);
-ant1_BandList.push_back(10);
-AntennaList[1] = new Antenna("1", ant1_BandList, "KLM34xa");
+SimpleList<int> ant1_BandList;<br>
+ant1_BandList.push_back(20);<br>
+ant1_BandList.push_back(15);<br>
+ant1_BandList.push_back(10);<br>
+AntennaList[1] = new Antenna("1", ant1_BandList, "KLM34xa");<br>
 `
 
 **License: This code is FREE for private use by Amateur Radio Operators<br>**

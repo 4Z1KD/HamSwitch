@@ -5,11 +5,8 @@
 The hardware is based on an Arduino 'Uno'<br>
 ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/arduino uno.png?raw=true "Arduino UNO")
 
-74HC238 - 3 to 8 Line Decoder chip<br>
-![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/74HC238.png?raw=true "74HC238 Chip")
-
-Rotary Encoder<br>
-![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/rotary encoder.jpg?raw=true "rotary encoder")
+74HC238 - 3 to 8 Line Decoder chip | Rotary Encoder
+![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/74HC238.png?raw=true "74HC238 Chip") | ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/rotary encoder.jpg?raw=true "rotary encoder")
 
 <h3>Application</h3>
 The application allows the user to toggle between 2 antenna selection modes:<br>

@@ -1,7 +1,7 @@
-# HamSwitch
-##Arduino based auto antenna switch
+<h1> HamSwitch</h1>
+<h2>Arduino based auto antenna switch</h2>
 
-###Hardware
+<h3>Hardware</h3>
 <table>
 <tr>
   <td>Arduino 'Uno'</td>
@@ -15,7 +15,7 @@
 </tr>
 </table>
 
-###Application
+<h3>Application</h3>
 The application allows the user to toggle between 2 antenna selection modes:<br>
 1. Automatic + Manual selection (Radio Priority Mode)<br>
 2. Manual selection (Manual Only Mode)<br>
@@ -27,10 +27,10 @@ if the user turns the rotary encoder, HamSwitch will change back to "Manual only
 In "Manual Only Mode", the radio input is ignored (The controller does not send CAT requests) and the 3 to 8 decoder<br>
 selects the relay (antenna) based on the user input from the rotary encoder.<br>
 
-###Emergency Button
+<h3>Emergency Button</h3>
 Clicking the rotary encoder button changes to "Manual Only Mode" and selects the dummy load.<br>
 
-###State Persistence
+<h3>State Persistence</h3>
 Every change in the selected antenna and in the selection mode is saved to the eeprom and loaded when HamSwitch is turned on.
 This way the user gets his HamSwitch just as it was left..
 
@@ -44,7 +44,7 @@ Here is the Realy Schema:<br>
 ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/Relay%20Schema.PNG?raw=true "HamSwitch Relay Schema")
 </a>
 
-##Usage
+<h3>Usage</h3>
 All you have to do is to define your list of antennas<br>
 **Antenna has 3 parameters:**<br>
 **Port** - The Socket number it is connected to. Since HamSwitch supports 8 sockets, this number is in the range of 0-7.<br>
@@ -75,7 +75,7 @@ ant1_BandList.push_back(10);
 AntennaList[1] = new Antenna("1", ant1_BandList, "KLM34xa");
 ```
 
-##License
+<h2>License</h2>
 **This code is FREE for private use by Amateur Radio Operators<br>**
 Created: December 2016<br>
 Design and Code: **_Gil, 4Z1KD_** (by request from Dubi, 4Z5DZ)<br>

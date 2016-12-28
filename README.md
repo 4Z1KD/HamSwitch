@@ -1,4 +1,4 @@
-<h1> HamSwitch</h1>
+<img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/HamSwitch.png' width="256px" style="vertical-align:middle">
 
 <h3>Hardware</h3>
 <table>

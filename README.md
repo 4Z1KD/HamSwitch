@@ -2,9 +2,18 @@
 ##Arduino based auto antenna switch
 
 ###Hardware
-Arduino 'Uno' | 74HC238 - 3 to 8 Line Decoder chip | Rotary Encoder
---- | --- | ---
-![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/arduino uno.png?raw=true "Arduino UNO") | ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/74HC238.png?raw=true "74HC238 Chip") | ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/rotary encoder.jpg?raw=true "rotary encoder")
+<table>
+<tr>
+  <td>Arduino 'Uno'</td>
+  <td>74HC238 - 3 to 8 Line Decoder chip</td>
+  <td>Rotary Encoder</td>
+</tr>
+<tr>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/arduino uno.png'></td>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/74HC238.png'></td>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/rotary encoder.jpg'></td>
+</tr>
+</table>
 
 ###Application
 The application allows the user to toggle between 2 antenna selection modes:<br>

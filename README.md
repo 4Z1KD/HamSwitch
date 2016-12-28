@@ -1,5 +1,4 @@
 <h1> HamSwitch</h1>
-<h2>Arduino based auto antenna switch</h2>
 
 <h3>Hardware</h3>
 <table>
@@ -33,6 +32,8 @@ Clicking the rotary encoder button changes to "Manual Only Mode" and selects the
 <h3>State Persistence</h3>
 Every change in the selected antenna and in the selection mode is saved to the eeprom and loaded when HamSwitch is turned on.
 This way the user gets his HamSwitch just as it was left..
+
+<h3>Schematics</h3>
 
 Here is the main Schema:<br>
 <a href="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/Main%20Schema.PNG" target="_blank">

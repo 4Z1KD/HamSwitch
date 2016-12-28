@@ -13,6 +13,16 @@
   <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/rotary encoder.jpg'></td>
 </tr>
 </table>
+<table>
+<tr>
+  <td>LCD I2C 96x16</td>
+  <td>5/6/9/12VDC Relay (Array of 8)</td>
+</tr>
+<tr>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/lcd.jpg'></td>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/relay.png'></td>
+</tr>
+</table>
 
 <h3>Application</h3>
 The application allows the user to toggle between 2 antenna selection modes:<br>

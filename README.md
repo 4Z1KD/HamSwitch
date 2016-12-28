@@ -59,6 +59,7 @@ Here is an example of how to define a 3 bands (20,15,10) KLM kt-34xa antenna on 
 `ant1_BandList.push_back(10);`<br>
 `AntennaList[1] = new Antenna("1", ant1_BandList, "KLM34xa");`<br>
 
+<h2>License</h2>
 **License: This code is FREE for private use by Amateur Radio Operators<br>**
 Created: December 2016<br>
 Design and Code: **_Gil, 4Z1KD_** (by request from Dubi, 4Z5DZ)<br>

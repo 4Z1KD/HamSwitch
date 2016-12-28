@@ -41,7 +41,7 @@ All you have to do is to define your list of antennas<br>
 
 If you open **MyAntennaList.h** you'll find a declaration of an array called *AntennaList*.<br>
 This is an array of *Antenna* type objects.<br>
-`Antenna* AntennaList[NUM_OF_ANTANNAS];`
+`Antenna* AntennaList[NUM_OF_ANTANNAS];`<br>
 
 You will also find a method called *InitAntennaList()* and this is the place to define your antennas.<br>
 The method is devided to 8 sections - one for each antenna.<br>
@@ -52,13 +52,12 @@ In order to define the band list, just create a *SimpleList* object.<br>
 Use *push_back(int)* to add the band to the list.<br>
 
 Here is an example of how to define a 3 bands (20,15,10) KLM kt-34xa antenna on port 1:<br>
-```
-SimpleList<int> ant1_BandList;
-ant1_BandList.push_back(20);
-ant1_BandList.push_back(15);
-ant1_BandList.push_back(10);
-AntennaList[1] = new Antenna("1", ant1_BandList, "KLM34xa");
-```
+
+`SimpleList<int> ant1_BandList;`<br>
+`ant1_BandList.push_back(20);`<br>
+`ant1_BandList.push_back(15);`<br>
+`ant1_BandList.push_back(10);`<br>
+`AntennaList[1] = new Antenna("1", ant1_BandList, "KLM34xa");`<br>
 
 **License: This code is FREE for private use by Amateur Radio Operators<br>**
 Created: December 2016<br>

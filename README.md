@@ -32,6 +32,35 @@ Here is the Realy Schema:<br>
 ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/Relay%20Schema.PNG?raw=true "HamSwitch Relay Schema")
 </a>
 
+<h2>Usage</h2>
+All you have to do is to define your list of antennas<br>
+**Antenna has 3 parameters:**<br>
+**Port** - The Socket number it is connected to. Since HamSwitch supports 8 sockets, this number is in the range of 0-7.<br>
+**Bands** - The list of bands it supports.<br>
+**Description** - a friendly name e.g. 'Dipole 40'.<br>
+
+If you open **MyAntennaList.h** you'll find a declaration of an array called *AntennaList*.<br>
+```
+Antenna* AntennaList[NUM_OF_ANTANNAS];
+```
+This is an array of *Antenna* type objects.<br>
+
+You will also find a method called *InitAntennaList()* and this is the place to define your antennas.<br>
+The method is devided to 8 sections - one for each antenna.<br>
+The Port is simply the index of the antenna in *AntennaList* array.<br>
+Port 0 is **always* the Dummy Load - **Do not change that!**<br>
+
+In order to define the band list, just create a *SimpleList* object.<br>
+Use *push_back(int)* to add the band to the list.<br>
+
+```
+SimpleList<int> ant1_BandList;
+ant1_BandList.push_back(20);
+ant1_BandList.push_back(15);
+ant1_BandList.push_back(10);
+AntennaList[1] = new Antenna("1", ant1_BandList, "KLM34xa");
+```
+
 **License: This code is FREE for private use by Amateur Radio Operators<br>**
 Created: December 2016<br>
 Design and Code: **_Gil, 4Z1KD_** (by request from Dubi, 4Z5DZ)<br>

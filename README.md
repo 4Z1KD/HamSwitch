@@ -1,3 +1,4 @@
+<meta property="og:image" content="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/HamSwitch.png" />
 <img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/HamSwitch.png' width="256px" style="vertical-align:middle">
 
 <h3>Hardware</h3>

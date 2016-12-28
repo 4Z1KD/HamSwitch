@@ -40,11 +40,8 @@ All you have to do is to define your list of antennas<br>
 **Description** - a friendly name e.g. 'Dipole 40'.<br>
 
 If you open **MyAntennaList.h** you'll find a declaration of an array called *AntennaList*.<br>
-```
-Antenna* AntennaList[NUM_OF_ANTANNAS];
-```
-
 This is an array of *Antenna* type objects.<br>
+`Antenna* AntennaList[NUM_OF_ANTANNAS];`
 
 You will also find a method called *InitAntennaList()* and this is the place to define your antennas.<br>
 The method is devided to 8 sections - one for each antenna.<br>
@@ -54,6 +51,7 @@ Port 0 is **always** the Dummy Load - **Do not change that!**<br>
 In order to define the band list, just create a *SimpleList* object.<br>
 Use *push_back(int)* to add the band to the list.<br>
 
+Here is an example of how to define a 3 bands (20,15,10) KLM kt-34xa antenna:<br>
 ```
 SimpleList<int> ant1_BandList;
 ant1_BandList.push_back(20);

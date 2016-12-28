@@ -220,7 +220,7 @@ void AutoAntennaSelector()
   else //if it is
   {
     //iterate over the antenna list
-    for (int i = 0; i < NUM_OF_ANTANNA; i++) {
+    for (int i = 0; i < NUM_OF_ANTANNAS; i++) {
       SimpleList<int>* mybands = AntennaList[i]->GetBands();
       //and for each antenna, iterate over the bands it supports
       for (SimpleList<int>::iterator itr = mybands->begin(); itr != mybands->end(); ++itr)

@@ -43,6 +43,7 @@ If you open **MyAntennaList.h** you'll find a declaration of an array called *An
 ```
 Antenna* AntennaList[NUM_OF_ANTANNAS];
 ```
+
 This is an array of *Antenna* type objects.<br>
 
 You will also find a method called *InitAntennaList()* and this is the place to define your antennas.<br>

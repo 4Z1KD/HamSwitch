@@ -43,6 +43,7 @@
 #include "DisplayService.h"
 #include "Antenna.h"
 #include "MyAntennaList.h"
+#include "RadioSettings.h"
 #include <LiquidCrystal_I2C.h>
 #include <SimpleList.h>
 
@@ -149,7 +150,8 @@ void loop() {
   //if in auto mode, and it is time to send command (every interval) -> write the command to the radioSerial
   if (IsAuto && (currentMillis - previousMillis >= interval)) {
     previousMillis = currentMillis;
-    radioSerial.println("FA;");
+    String command = GetFrequencyCommand(MY_RADIO);
+    radioSerial.println(command);
   }
   //----------------------------------------------------------------------------------------------------------//
   //Only alert the user if there was a change in the state

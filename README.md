@@ -48,7 +48,7 @@ This is an array of *Antenna* type objects.<br>
 You will also find a method called *InitAntennaList()* and this is the place to define your antennas.<br>
 The method is devided to 8 sections - one for each antenna.<br>
 The Port is simply the index of the antenna in *AntennaList* array.<br>
-Port 0 is **always* the Dummy Load - **Do not change that!**<br>
+Port 0 is **always** the Dummy Load - **Do not change that!**<br>
 
 In order to define the band list, just create a *SimpleList* object.<br>
 Use *push_back(int)* to add the band to the list.<br>

@@ -1,7 +1,7 @@
 # HamSwitch
 ##Arduino based auto antenna switch
 
-Hardware
+###Hardware
 Arduino 'Uno' | 74HC238 - 3 to 8 Line Decoder chip | Rotary Encoder
 --- | --- | ---
 ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/arduino uno.png?raw=true "Arduino UNO") | ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/74HC238.png?raw=true "74HC238 Chip") | ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/rotary encoder.jpg?raw=true "rotary encoder")
@@ -60,9 +60,9 @@ Here is an example of how to define a 3 bands (20,15,10) KLM kt-34xa antenna on 
 
 ```javascript
 SimpleList<int> ant1_BandList;
-ant1_BandList.push_back(20);`
-ant1_BandList.push_back(15);`
-ant1_BandList.push_back(10);`
+ant1_BandList.push_back(20);
+ant1_BandList.push_back(15);
+ant1_BandList.push_back(10);
 AntennaList[1] = new Antenna("1", ant1_BandList, "KLM34xa");
 ```
 

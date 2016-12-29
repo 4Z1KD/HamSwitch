@@ -1,5 +1,5 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/HamSwitch.png" />
-<img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/HamSwitch.png' width="256px" style="vertical-align:middle">
+<h1>HamSwitch</h1>
 
 <h3>Hardware</h3>
 <table>
@@ -94,12 +94,12 @@ AntennaList[1] = new Antenna("1", ant1_BandList, "KLM34xa");
 <h2>Download</h2>
 <a href="https://github.com/4Z1KD/HamSwitch/archive/master.zip" target="_blank">Download HamSwitch</a>
 
-<h3>Authors</h3>
+<h2>Authors</h2>
 Requirements and Analysis: **_Dubi, 4Z5DZ_**<br>
 Design and Code: **_Gil, 4Z1KD_**
 
 Created: December 2016<br>
 <script>
     var x = document.getElementsByClassName("button");
-    x[0].innerHTML = "Hello World!";
+    x[0].innerHTML = "<img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/HamSwitch.png' width='256px' style='vertical-align:middle'>"
 </script>

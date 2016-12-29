@@ -57,8 +57,17 @@ Here is the Realy Schema:<br>
 </a>
 
 <h3>Usage</h3>
-All you have to do is to define your list of antennas<br>
-**Antenna has 3 parameters:**<br>
+All you have to do is telling HamSwitch which radio you use and define your list of antennas<br>
+
+<h4>Selecting the radio</h4>
+Just open **RadioSettings.h** and set *MY_RADIO* to the right value
+
+```javascript
+const int MY_RADIO = 2; //0 for ICOM, 1 for Yaesu, 2 for KENWOOD
+```
+
+<h4>Setting the antenna list</h4>
+Antenna has 3 parameters:<br>
 **Port** - The Socket number it is connected to. Since HamSwitch supports 8 sockets, this number is in the range of 0-7.<br>
 **Bands** - The list of bands it supports.<br>
 **Description** - a friendly name e.g. 'Dipole 40'.<br>

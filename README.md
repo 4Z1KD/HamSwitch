@@ -23,6 +23,14 @@
   <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/lcd.jpg'></td>
   <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/relay.png'></td>
 </tr>
+<tr>
+  <td>Resistors</td>
+  <td>2n2222 Transistors</td>
+</tr>
+<tr>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/resistors.jpg'></td>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/transistors.jpg'></td>
+</tr>
 </table>
 
 <h3>Application</h3>

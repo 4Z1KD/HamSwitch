@@ -150,7 +150,7 @@ void loop() {
   //if in auto mode, and it is time to send command (every interval) -> write the command to the radioSerial
   if (IsAuto && (currentMillis - previousMillis >= interval)) {
     previousMillis = currentMillis;
-    String command = GetFrequencyCommand(MY_RADIO);
+    String command = GetFrequencyCommand();
     radioSerial.println(command);
   }
   //----------------------------------------------------------------------------------------------------------//

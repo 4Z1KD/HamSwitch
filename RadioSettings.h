@@ -6,9 +6,9 @@ const int KENWOOD = 2;
 
 const int MY_RADIO = 2; //0 for ICOM, 1 for Yaesu, 2 for KENWOOD
 
-String GetFrequencyCommand(int radio)
+String GetFrequencyCommand()
 {
-  switch (radio) {
+  switch (MY_RADIO) {
     case ICOM:
       return "FA;";
       break;

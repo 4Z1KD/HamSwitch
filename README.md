@@ -68,10 +68,16 @@ Here is the Realy Schema:<br>
 All you have to do is telling HamSwitch which radio you use and define your list of antennas<br>
 
 <h4>Selecting the radio</h4>
-Just open **RadioSettings.h** and set *MY_RADIO* to the right value
+Just open **UserSettings.h** and set *MY_RADIO* to the right value
 
 ```javascript
-const int MY_RADIO = 2; //0 for ICOM, 1 for Yaesu, 2 for KENWOOD
+/*
+  ICOM 0
+  YAESU 1
+  KENWOOD 2
+  ELECRAFT 3
+*/
+const int MY_RADIO = 2;
 ```
 
 <h4>Setting the antenna list</h4>

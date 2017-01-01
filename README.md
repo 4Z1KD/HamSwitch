@@ -68,7 +68,7 @@ Here is the Realy Schema:<br>
 All you have to do is telling HamSwitch which radio you use and define your list of antennas<br>
 
 <h4>Selecting the radio</h4>
-Just open **UserSettings.h** and set *MY_RADIO* to the right value
+Just open **UserSettings.h** and set *MY_RADIO* to the right value (HamSwitch needs to know which radio you use so it can send the correct commands and correctly parse the response)
 
 ```javascript
 /*

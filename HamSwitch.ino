@@ -373,9 +373,9 @@ void DisplaySelectedAntenna(int antenna)
 //if it gets a semicoloumn (';') - that indicates the end of a data chunk - it sets the 'stringComplete' to true
 //so the main loop can do its work only on a complete data chunks.
 void serialEvent() {
-  while (Serial.available()) {
+  while (radioSerial.available()) {
     // get the new byte:
-    char inChar = (char)Serial.read();
+    char inChar = (char)radioSerial.read();
     // add it to the inputString:
     inputString += inChar;
     // if the incoming character is semicoloumn, set the flag
@@ -385,19 +385,6 @@ void serialEvent() {
     }
   }
 }
-//void serialEvent() {
-//  while (radioSerial.available()) {
-//    // get the new byte:
-//    char inChar = (char)radioSerial.read();
-//    // add it to the inputString:
-//    inputString += inChar;
-//    // if the incoming character is semicoloumn, set the flag
-//    if (inChar == ';') {
-//      inputString.trim(); //trim the string
-//      stringComplete = true;
-//    }
-//  }
-//}
 
 void GetFromMemory()
 {

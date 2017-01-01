@@ -2,10 +2,6 @@
 #include "UserSettings.h"
 #include <SimpleList.h>
 
-
-//MatchState ms; //The regex object - used for parsing the radio response
-//char buf[20];//MatchState works with char* rather than Strings so this is the buffer that holds the command in a char array
-
 //Radio Enumeration
 const int ICOM = 0;
 const int YAESU = 1;

@@ -108,7 +108,8 @@ DisplayService dispServe(&lcdx);
 void setup() {
   dispServe.Init();
   InitAntennaList();
-  
+  InitRadioList();
+
   //set Decoder Pin modes
   pinMode(Decoder1_PIN_A0, OUTPUT);
   pinMode(Decoder1_PIN_A1, OUTPUT);
@@ -150,8 +151,13 @@ void loop() {
   //if in auto mode, and it is time to send command (every interval) -> write the command to the radioSerial
   if (IsAuto && (currentMillis - previousMillis >= interval)) {
     previousMillis = currentMillis;
-    String command = GetFrequencyCommand();
-    radioSerial.println(command);
+    Radio myRadio = GetMyRadio(); //Get a struct that represents a Radio (defined @ RadioSettings.h)
+    String command = myRadio.FrequencyCommand; //get the FrequencyCommand from the struct
+    if (myRadio.Id != -1) //make sure it is not the DummyRadio
+    {
+      radioSerial.println(command);
+      //Serial.println(command);
+    }
   }
   //----------------------------------------------------------------------------------------------------------//
   //Only alert the user if there was a change in the state
@@ -183,13 +189,11 @@ void loop() {
   //if the entire string has arrived -> parse the frequency and reset the input string
   if (stringComplete && IsAuto) //Auto mode
   {
-    if (ParseRawInput())
+    Frequency = ParseFrequencyResponse(inputString);
+    if ((Frequency != 0) && (Frequency != PreviousFrequency)) //if the frequency is not 0 (i.e. valid) and has changed -> select the antenna..
     {
-      if (Frequency != PreviousFrequency)
-      {
-        AutoAntennaSelector();
-        PreviousFrequency = Frequency;
-      }
+      AutoAntennaSelector();
+      PreviousFrequency = Frequency;
     }
     inputString = ""; //reset the input string
     stringComplete = false; //reset the complete flag
@@ -287,20 +291,6 @@ void SwitchTo(int antenna)
   }
 }
 
-//********************************************************** Parser **********************************************************************************//
-
-//The command structure is: "S 6529@1537.01> FA001800000;"
-//This method retrieves only the frequency
-bool ParseRawInput()
-{
-  //Ignore non-frequency commands (if you cant find 'FA' in the command - it is not a frequency command - return false)
-  if (inputString.indexOf("FA") == -1) return false;
-
-  String FA = inputString.substring(inputString.indexOf("FA") + 2);//get the frequency value - it begins 2 characters after the index of 'FA'
-  Frequency = FA.toInt();//parse to int
-  return true;
-}
-
 //********************************************************* Events ***********************************************************************//
 
 void ToggleMode()
@@ -358,6 +348,7 @@ ISR(PCINT0_vect) {
         if (selectedAntenna == -1) selectedAntenna = 7;
       }
       isManualyAnttenaChanged = true;
+      PreviousFrequency = -1;
       isModeChanged = true;
       IsAuto = false;
     }

@@ -1,19 +1,4 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/HamSwitch.png" />
-<style>
-.inner
-{
-  width: 80%;
-}
-#main-content
-{
- width: 80%;
-}
-#sidebar
-{
-float:none;
- width: 100%;
-}
-</style>
 <h1>HamSwitch</h1>
 
 <h3>Hardware</h3>
@@ -141,3 +126,18 @@ Created: December 2016<br>
     var x = document.getElementsByClassName("button");
     x[0].outerHTML = '<img src="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/HamSwitch.png" width="156px" style="position:absolute; top:0; right:0; background:transparent">'
 </script>
+<style>
+.inner
+{
+  width: 80%;
+}
+#main-content
+{
+ width: 80%;
+}
+#sidebar
+{
+float:none;
+ width: 100%;
+}
+</style>

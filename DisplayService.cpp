@@ -35,3 +35,15 @@ void DisplayService::Log(String str, int col, int row, boolean isToClear)
   m_lcd->print(str);
 }
 
+void DisplayService::Blink(int repeats)
+{
+  for (int i = 0; i < repeats; i++)
+  {
+    m_lcd->backlight();
+    delay(250);
+    m_lcd->noBacklight();
+    delay(250);
+  }
+  m_lcd->backlight();
+}
+

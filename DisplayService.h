@@ -23,6 +23,7 @@ class DisplayService
     void Log(String str, int col, int row, boolean isToClear);
     void DisplaySelectedBand(int band);
     void DisplaySelectedAntenna(int antenna);
+    void Blink(int repeats);
   private:
     LiquidCrystal_I2C* m_lcd;
 };

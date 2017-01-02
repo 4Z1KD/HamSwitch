@@ -5,7 +5,5 @@
   ELECRAFT 3
 */
 const int MY_RADIO = 2;
-String USER_CALLSIGN = "YOUR CALLSIGN";
-
 bool IS_DEBUG = false; //debug flag
 

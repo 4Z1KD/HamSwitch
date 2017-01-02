@@ -133,7 +133,8 @@ void setup() {
   radioSerial.begin(9600);
   Serial.begin(9600); // Open serial communications and wait for port to open:
   while (!Serial) {}
-  dispServe.Log(USER_CALLSIGN, 0, 0, 0);
+  dispServe.Blink(3);
+  dispServe.Log("HamSwitch v1.0.0", 0, 0, 0);
   dispServe.Log("Ready...", 0, 1, 0);
 
   prevSelectedAntenna = -1; //initialize with out of range value for the first print
@@ -363,7 +364,7 @@ ISR(PCINT0_vect) {
 
 void DisplaySelectedAntenna(int antenna)
 {
-  dispServe.Log("ANT" + AntennaList[antenna]->GetPort() + " - " + AntennaList[antenna]->GetDescription(), 0, 1, 0);
+  dispServe.Log(AntennaList[antenna]->GetPort() + ") " + AntennaList[antenna]->GetDescription(), 0, 1, 0);
 }
 
 //*************************************************************************************************************************//

@@ -1,4 +1,19 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/HamSwitch.png" />
+<style>
+.inner
+{
+  width: 80%;
+}
+#main-content
+{
+ width: 80%;
+}
+#sidebar
+{
+float:none;
+ width: 100%;
+}
+</style>
 <h1>HamSwitch</h1>
 
 <h3>Hardware</h3>

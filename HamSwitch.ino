@@ -98,9 +98,6 @@ volatile bool IsAuto = true; //Auto mode flag
 unsigned long previousMillis = 0; // required for delay of CAT command
 const long interval = 1000; // delay interval (milliseconds)
 
-bool IS_DEBUG = false; //debug flag
-String UserCallsign = "YOUR CALLSIGN";
-
 LiquidCrystal_I2C lcdx(I2C_ADDR, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin);
 DisplayService dispServe(&lcdx);
 
@@ -136,7 +133,7 @@ void setup() {
   radioSerial.begin(9600);
   Serial.begin(9600); // Open serial communications and wait for port to open:
   while (!Serial) {}
-  dispServe.Log(UserCallsign, 0, 0, 0);
+  dispServe.Log(USER_CALLSIGN, 0, 0, 0);
   dispServe.Log("Ready...", 0, 1, 0);
 
   prevSelectedAntenna = -1; //initialize with out of range value for the first print
@@ -155,8 +152,10 @@ void loop() {
     String command = myRadio.FrequencyCommand; //get the FrequencyCommand from the struct
     if (myRadio.Id != -1) //make sure it is not the DummyRadio
     {
-      radioSerial.println(command);
-      //Serial.println(command);
+      if (IS_DEBUG)
+        Serial.println(command);
+      else
+        radioSerial.println(command);
     }
   }
   //----------------------------------------------------------------------------------------------------------//
@@ -372,16 +371,43 @@ void DisplaySelectedAntenna(int antenna)
 //If the stream is not empty - it reads all the data from the stream until it is empty
 //if it gets a semicoloumn (';') - that indicates the end of a data chunk - it sets the 'stringComplete' to true
 //so the main loop can do its work only on a complete data chunks.
+//void serialEvent() {
+//  while (radioSerial.available()) {
+//    // get the new byte:
+//    char inChar = (char)radioSerial.read();
+//    // add it to the inputString:
+//    inputString += inChar;
+//    // if the incoming character is semicoloumn, set the flag
+//    if (inChar == ';') {
+//      inputString.trim(); //trim the string
+//      stringComplete = true;
+//    }
+//  }
+//}
 void serialEvent() {
-  while (radioSerial.available()) {
-    // get the new byte:
-    char inChar = (char)radioSerial.read();
-    // add it to the inputString:
-    inputString += inChar;
-    // if the incoming character is semicoloumn, set the flag
-    if (inChar == ';') {
-      inputString.trim(); //trim the string
-      stringComplete = true;
+  if (IS_DEBUG)
+  {
+    while (Serial.available()) {
+      // get the new byte:
+      char inChar = (char)Serial.read();
+      // add it to the inputString:
+      inputString += inChar;
+      // if the incoming character is semicoloumn, set the flag
+      if (inChar == ';') {
+        inputString.trim(); //trim the string
+        stringComplete = true;
+      }
+    }
+  }
+  else
+  {
+    while (radioSerial.available()) {
+      char inChar = (char)radioSerial.read();
+      inputString += inChar;
+      if (inChar == ';') {
+        inputString.trim(); //trim the string
+        stringComplete = true;
+      }
     }
   }
 }

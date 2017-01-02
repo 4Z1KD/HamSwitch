@@ -134,13 +134,13 @@ void setup() {
   Serial.begin(9600); // Open serial communications and wait for port to open:
   while (!Serial) {}
   dispServe.Blink(3);
-  dispServe.Log("HamSwitch v1.0.0", 0, 0, 0);
-  dispServe.Log("Ready...", 0, 1, 0);
+  dispServe.Log11("HamSwitch v1.0.0", 0, 0, 0, 200);
+  dispServe.Log11("Ready...", 0, 1, 0, 200);
 
   prevSelectedAntenna = -1; //initialize with out of range value for the first print
   GetFromMemory(); //get the value of the last antenna and the selection mode, before HamSwitch was switched off
 
-  delay(3000);
+  delay(2000);
 }
 
 void loop() {

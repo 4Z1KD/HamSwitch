@@ -21,6 +21,7 @@ class DisplayService
     DisplayService(LiquidCrystal_I2C* lcdx);
     void Init();
     void Log(String str, int col, int row, boolean isToClear);
+    void Log11(String str, int col, int row, boolean isToClear, int t_delay);
     void DisplaySelectedBand(int band);
     void DisplaySelectedAntenna(int antenna);
     void Blink(int repeats);

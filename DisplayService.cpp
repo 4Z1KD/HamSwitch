@@ -35,6 +35,20 @@ void DisplayService::Log(String str, int col, int row, boolean isToClear)
   m_lcd->print(str);
 }
 
+void DisplayService::Log11(String str, int col, int row, boolean isToClear, int t_delay)
+{
+  if (isToClear)
+    m_lcd->clear();
+  m_lcd->setCursor(col, row);
+  char buf[str.length() + 1];
+  str.toCharArray(buf, str.length() + 1);
+  for (int i = 0; i < str.length(); i++)
+  {
+    m_lcd->print(buf[i]);
+    delay(t_delay);
+  }
+}
+
 void DisplayService::Blink(int repeats)
 {
   for (int i = 0; i < repeats; i++)

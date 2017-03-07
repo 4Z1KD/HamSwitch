@@ -100,6 +100,7 @@ const long interval = 1000; // delay interval (milliseconds)
 
 LiquidCrystal_I2C lcdx(I2C_ADDR, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin);
 DisplayService dispServe(&lcdx);
+Radio myRadio;
 
 //**************************************************************** setup / loop ********************************************************************//
 void setup() {
@@ -139,24 +140,28 @@ void setup() {
 
   prevSelectedAntenna = -1; //initialize with out of range value for the first print
   GetFromMemory(); //get the value of the last antenna and the selection mode, before HamSwitch was switched off
-
+  
+  myRadio = GetMyRadio(); //Get a struct that represents a Radio (defined @ RadioSettings.h)
+  
   delay(2000);
 }
 
 void loop() {
+  CheckForData();
   unsigned long currentMillis = millis();
   //----------------------------------------------------------------------------------------------------------//
   //if in auto mode, and it is time to send command (every interval) -> write the command to the radioSerial
   if (IsAuto && (currentMillis - previousMillis >= interval)) {
     previousMillis = currentMillis;
-    Radio myRadio = GetMyRadio(); //Get a struct that represents a Radio (defined @ RadioSettings.h)
     String command = myRadio.FrequencyCommand; //get the FrequencyCommand from the struct
     if (myRadio.Id != -1) //make sure it is not the DummyRadio
     {
       if (IS_DEBUG)
         Serial.println(command);
       else
-        radioSerial.println(command);
+      {
+        radioSerial.print(command);
+      }
     }
   }
   //----------------------------------------------------------------------------------------------------------//
@@ -186,7 +191,7 @@ void loop() {
     isManualyAnttenaChanged = false;
   }
   //----------------------------------------------------------------------------------------------------------//
-  //if the entire string has arrived -> parse the frequency and reset the input string
+  //if the entire string has arrived -> parse the frequency and reset the input string  
   if (stringComplete && IsAuto) //Auto mode
   {
     Frequency = ParseFrequencyResponse(inputString);
@@ -385,7 +390,7 @@ void DisplaySelectedAntenna(int antenna)
 //    }
 //  }
 //}
-void serialEvent() {
+void CheckForData() {
   if (IS_DEBUG)
   {
     while (Serial.available()) {

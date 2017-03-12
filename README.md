@@ -9,9 +9,9 @@
   <td>Rotary Encoder</td>
 </tr>
 <tr>
-  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/arduino uno.png'></td>
-  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/74HC238.png'></td>
-  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/rotary encoder.jpg'></td>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/arduino uno.png' width='150px'></td>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/74HC238.png' width='150px'></td>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/rotary encoder.jpg' width='150px'></td>
 </tr>
 </table>
 <table>
@@ -20,16 +20,16 @@
   <td>5/6/9/12VDC Relay (Array of 8)</td>
 </tr>
 <tr>
-  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/lcd.jpg'></td>
-  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/relay.png'></td>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/lcd.jpg' width='150px'></td>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/relay.png' width='150px'></td>
 </tr>
 <tr>
   <td>Resistors</td>
   <td>2n2222 Transistors</td>
 </tr>
 <tr>
-  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/resistors.jpg'></td>
-  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/transistors.jpg'></td>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/resistors.jpg' width='150px'></td>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/transistors.jpg' width='150px'></td>
 </tr>
 </table>
 

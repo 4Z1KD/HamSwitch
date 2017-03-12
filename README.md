@@ -11,7 +11,7 @@
 <tr>
   <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/arduino uno.png' width='150px'></td>
   <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/74HC238.png' width='150px'></td>
-  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/rotary encoder.jpg' width='150px'></td>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/rotary encoder.jpg' width='90px'></td>
 </tr>
 </table>
 <table>

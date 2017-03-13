@@ -1,7 +1,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/HamSwitch.png" />
 <h1>HamSwitch</h1>
 
-<h3>Hardware</h3>
+<h2>Hardware</h2>
 <table>
 <tr>
   <td>Arduino 'Uno'</td>
@@ -33,7 +33,7 @@
 </tr>
 </table>
 
-<h3>Application</h3>
+<h2>Application</h2>
 The application allows the user to toggle between 2 antenna selection modes:<br>
 1. Automatic + Manual selection (Radio Priority Mode)<br>
 2. Manual selection (Manual Only Mode)<br>
@@ -52,7 +52,7 @@ Clicking the rotary encoder button changes to "Manual Only Mode" and selects the
 Every change in the selected antenna and in the selection mode is saved to the eeprom and loaded when HamSwitch is turned on.
 This way the user gets his HamSwitch just as it was left..
 
-<h3>Schematics</h3>
+<h2>Schematics</h2>
 
 Here is the main Schema:<br>
 <a href="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/Main%20Schema.PNG" target="_blank">
@@ -64,7 +64,7 @@ Here is the Realy Schema:<br>
 ![Alt text](https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/Relay%20Schema.PNG?raw=true "HamSwitch Relay Schema")
 </a>
 
-<h3>Usage</h3>
+<h2>Usage</h2>
 All you have to do is telling HamSwitch which radio you use and define your list of antennas<br>
 
 <h4>Selecting the radio</h4>

@@ -124,7 +124,7 @@ Design and Code: **_Gil, 4Z1KD_**
 Created: December 2016<br>
 <script>
     var x = document.getElementsByClassName("button");
-    x[0].outerHTML = '<img src="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/HamSwitch.png" width="156px" style="position:absolute; top:0; right:0; background:transparent">'
+    x[0].outerHTML = '<img src="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/HamSwitch.png" width="156px" style="position:absolute; top:-15px; right:-70px; background:transparent">'
 </script>
 <style>
 .inner

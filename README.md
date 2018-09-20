@@ -27,9 +27,9 @@
 </table>
 
 <h2>Application</h2>
-The application allows the user to toggle between 2 antenna selection modes:<br>
-1. Automatic + Manual selection (Radio Priority Mode)<br>
-2. Manual selection (Manual Only Mode)<br>
+HamSwitch allows the user to toggle between 2 antenna selection modes:<br>
+1. Automatic (Radio Priority Mode)<br>
+2. Manual (Manual Only Mode)<br>
 
 In "Radio Priority Mode", the 3 to 8 decoder selects the relay (antenna)<br>
 based on the frequency input from the radio, while maintaining the user manual selection capability.<br>
@@ -58,7 +58,7 @@ Here is the Realy Schema:<br>
 </a>
 
 <h2>Usage</h2>
-All you have to do is telling HamSwitch which radio you use and define your list of antennas<br>
+All you have to do is to set the radio flag and to populate your list of antennas<br>
 
 <h4>Selecting the radio</h4>
 Just open **UserSettings.h** and set *MY_RADIO* to the right value (HamSwitch needs to know which radio you use so it can send the correct commands and correctly parse the response)

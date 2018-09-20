@@ -4,11 +4,11 @@
 <h2>Hardware</h2>
 <table>
 <tr>
-  <td>Arduino 'Uno'</td>
-  <td>74HC238 -<br/>3 to 8 Line Decoder chip</td>
-  <td>Rotary Encoder</td>
-  <td>LCD I2C 96x16</td>
-  <td>5/6/9/12VDC Relay<br/>(Array of 8)</td>
+  <td>Arduino<br/>'Uno'</td>
+  <td>74HC238 -<br/>3 to 8 Decoder</td>
+  <td>Rotary<br/>Encoder</td>
+  <td>LCD</td>
+  <td>DC Relay<br/>(Array of 8)</td>
 </tr>
 <tr>
   <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/arduino uno.png' width='120px'></td>

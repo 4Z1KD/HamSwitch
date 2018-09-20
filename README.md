@@ -13,8 +13,8 @@
 <tr>
   <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/arduino uno.png' width='120px'></td>
   <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/74HC238.png' width='100px'></td>
-  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/rotary encoder.jpg' width='60px'></td>
-  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/lcd.jpg' width='100px'></td>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/rotary encoder.jpg' width='40px'></td>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/lcd.jpg' width='130px'></td>
   <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/relay.png' width='90px'></td>
 </tr>
 </table>

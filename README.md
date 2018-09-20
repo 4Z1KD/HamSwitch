@@ -115,6 +115,7 @@ Requirements and Analysis: **_Dubi, 4Z5DZ_**<br>
 Design and Code: **_Gil, 4Z1KD_**
 
 Created: December 2016<br>
+Latest Version: September 2018<br>
 <script>
     var x = document.getElementsByClassName("button");
     x[0].outerHTML = '<img src="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/HamSwitch.png" width="156px" style="position:absolute; top:-25px; right:-70px; background:transparent">'

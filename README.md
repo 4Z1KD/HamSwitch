@@ -114,7 +114,6 @@ AntennaList[1] = new Antenna("1", ant1_BandList, "KLM34xa");
 Requirements and Analysis: **_Dubi, 4Z5DZ_**<br>
 Design and Code: **_Gil, 4Z1KD_**
 
-Created: December 2016<br>
 Latest Version: September 2018<br>
 <script>
     var x = document.getElementsByClassName("button");

@@ -7,22 +7,18 @@
   <td>Arduino 'Uno'</td>
   <td>74HC238 - 3 to 8 Line Decoder chip</td>
   <td>Rotary Encoder</td>
+  <td>LCD I2C 96x16</td>
+  <td>5/6/9/12VDC Relay (Array of 8)</td>
 </tr>
 <tr>
   <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/arduino uno.png' width='120px'></td>
   <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/74HC238.png' width='100px'></td>
   <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/rotary encoder.jpg' width='60px'></td>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/lcd.jpg' width='100px'></td>
+  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/relay.png' width='90px'></td>
 </tr>
 </table>
 <table>
-<tr>
-  <td>LCD I2C 96x16</td>
-  <td>5/6/9/12VDC Relay (Array of 8)</td>
-</tr>
-<tr>
-  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/lcd.jpg' width='120px'></td>
-  <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/relay.png' width='100px'></td>
-</tr>
 <tr>
   <td>Resistors</td>
   <td>2n2222 Transistors</td>

@@ -22,11 +22,13 @@
 </tr>
   <tr>
     <td>Resistors</td>
+    <td>Diodes</td>
   <td>2n2222<br/>Transistors</td>
     <td>Max232</td>
   </tr>
   <tr>
     <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/resistors.jpg' width='60px'></td>
+    <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/diode.jpg' width='60px'></td>
   <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/transistors.jpg' width='60px'></td>
     <td><img src='https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/max232.jpg' width='90px'></td>
   </tr>

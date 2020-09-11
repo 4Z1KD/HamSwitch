@@ -35,6 +35,7 @@
 
 **License: This code is FREE for private use by Amateur Radio Operators<br>**
   Created: December 2016<br>
+  Last Update: September 2020<br>
   Design and Code: **_Gil, 4Z1KD_** (by request from Dubi, 4Z5DZ)<br>
 **************************************************************************/
 
@@ -76,8 +77,6 @@ int AutoMode_GreenLED_PIN = 13;
 
 //Members (This is the place to define variables with global scope used in the application )
 AltSoftSerial radioSerial; //a serial port to the radio (pins: 8-RX ,9-TX)
-boolean stringComplete = false; // A flag that indicate a command has arrived through the serial port
-String inputString = ""; //The raw string of the command
 unsigned long Frequency = 0; //The frequency after parsing
 unsigned long PreviousFrequency = -1; //The frequency after parsing
 
@@ -131,19 +130,20 @@ void setup() {
   PCMSK0 |= (1 << PCINT2); //Interrupt on pin10
   PCMSK0 |= (1 << PCINT3); //Interrupt on pin11
 
+  myRadio = GetMyRadio(); //Get a struct that represents a Radio (defined @ RadioSettings.h)
+
   radioSerial.begin(9600);
   Serial.begin(9600); // Open serial communications and wait for port to open:
   while (!Serial) {}
-  dispServe.Blink(3);
-  dispServe.Log11("HamSwitch v1.0.0", 0, 0, 0, 200);
-  dispServe.Log11("Ready...", 0, 1, 0, 200);
+  dispServe.Blink(1);
+  dispServe.Log11("HamSwitch v2.0", 0, 0, 0, 50);
+  dispServe.Log11("Radio: ", 0, 1, 0, 100);
+  dispServe.Log11(myRadio.displayname, 7, 1, 0, 200);
 
   prevSelectedAntenna = -1; //initialize with out of range value for the first print
   GetFromMemory(); //get the value of the last antenna and the selection mode, before HamSwitch was switched off
-  
-  myRadio = GetMyRadio(); //Get a struct that represents a Radio (defined @ RadioSettings.h)
-  
-  delay(2000);
+
+  delay(1000);
 }
 
 void loop() {
@@ -153,15 +153,10 @@ void loop() {
   //if in auto mode, and it is time to send command (every interval) -> write the command to the radioSerial
   if (IsAuto && (currentMillis - previousMillis >= interval)) {
     previousMillis = currentMillis;
-    String command = myRadio.FrequencyCommand; //get the FrequencyCommand from the struct
+    RadioRequest FrequencyCommandFunction = myRadio.FrequencyCommand; //get the FrequencyCommand from the struct
     if (myRadio.Id != -1) //make sure it is not the DummyRadio
     {
-      if (IS_DEBUG)
-        Serial.println(command);
-      else
-      {
-        radioSerial.print(command);
-      }
+      FrequencyCommandFunction(&radioSerial);
     }
   }
   //----------------------------------------------------------------------------------------------------------//
@@ -191,17 +186,14 @@ void loop() {
     isManualyAnttenaChanged = false;
   }
   //----------------------------------------------------------------------------------------------------------//
-  //if the entire string has arrived -> parse the frequency and reset the input string  
-  if (stringComplete && IsAuto) //Auto mode
+  //if the entire string has arrived -> parse the frequency and reset the input string
+  if (IsAuto) //Auto mode
   {
-    Frequency = ParseFrequencyResponse(inputString);
     if ((Frequency != 0) && (Frequency != PreviousFrequency)) //if the frequency is not 0 (i.e. valid) and has changed -> select the antenna..
     {
       AutoAntennaSelector();
       PreviousFrequency = Frequency;
     }
-    inputString = ""; //reset the input string
-    stringComplete = false; //reset the complete flag
   }
   //----------------------------------------------------------------------------------------------------------//
   //To prevent flickering, only display the selected antenna if it was a change
@@ -219,10 +211,7 @@ void loop() {
 //**************************************************************** Antenna Selection *****************************************************************//
 void AutoAntennaSelector()
 {
-  //convert to Mhz (this is actually not required, but is just an example of what can be done when you have numeric value instead of string..)
-  float freqInMHZ = Frequency / 1000000.0;
-
-  int band = FrequencyToBand(freqInMHZ); //Figure out what is the band equivalent of this frequency
+  int band = FrequencyToBand(); //Figure out what is the band equivalent of this frequency
   if (band == 0) //make sure it is on the HAM bands
   {
     dispServe.Log("Non HAM Freq", 0, 0, 0);
@@ -305,8 +294,6 @@ void ToggleMode()
   // If interrupts come faster than 100ms, assume it's a bounce and ignore
   if (toggleModeInterrupt_time - last_ToggleModeInterrupt_time > 500)
   {
-    inputString = ""; //reset the input string
-    stringComplete = false; //reset the complete flag
     isModeChanged = true;
     IsAuto = !IsAuto;
   }
@@ -373,48 +360,13 @@ void DisplaySelectedAntenna(int antenna)
 }
 
 //*************************************************************************************************************************//
-//This method executes between every loop execution and monitors the Serial stream
-//If the stream is not empty - it reads all the data from the stream until it is empty
-//if it gets a semicoloumn (';') - that indicates the end of a data chunk - it sets the 'stringComplete' to true
-//so the main loop can do its work only on a complete data chunks.
-//void serialEvent() {
-//  while (radioSerial.available()) {
-//    // get the new byte:
-//    char inChar = (char)radioSerial.read();
-//    // add it to the inputString:
-//    inputString += inChar;
-//    // if the incoming character is semicoloumn, set the flag
-//    if (inChar == ';') {
-//      inputString.trim(); //trim the string
-//      stringComplete = true;
-//    }
-//  }
-//}
 void CheckForData() {
-  if (IS_DEBUG)
+
+  RadioResponse FrequencyResponseFunction = myRadio.FrequencyResponse; //get the FrequencyCommand from the struct
+  if (myRadio.Id != -1) //make sure it is not the DummyRadio
   {
-    while (Serial.available()) {
-      // get the new byte:
-      char inChar = (char)Serial.read();
-      // add it to the inputString:
-      inputString += inChar;
-      // if the incoming character is semicoloumn, set the flag
-      if (inChar == ';') {
-        inputString.trim(); //trim the string
-        stringComplete = true;
-      }
-    }
-  }
-  else
-  {
-    while (radioSerial.available()) {
-      char inChar = (char)radioSerial.read();
-      inputString += inChar;
-      if (inChar == ';') {
-        inputString.trim(); //trim the string
-        stringComplete = true;
-      }
-    }
+    Frequency = FrequencyResponseFunction(&radioSerial);
+    //Serial.println(Frequency);
   }
 }
 
@@ -439,50 +391,49 @@ void SaveModeToMemory(bool isAuto)
   EEPROM.put(sizeof(int), isAuto);
 }
 
-int FrequencyToBand(float freqInMHZ)
+int FrequencyToBand()
 {
 
-  if (freqInMHZ >= 1.8 && freqInMHZ <= 2.0) {
+  if (Frequency >= 180000 && Frequency <= 200000) {
     return 160;
   }
-  else if (freqInMHZ >= 3.5 && freqInMHZ <= 3.8) {
+  else if (Frequency >= 350000 && Frequency <= 400000) {
     return 80;
   }
-  else if (freqInMHZ >= 5.35 && freqInMHZ <= 5.4) {
+  else if (Frequency >= 500000 && Frequency <= 550000) {
     return 60;
   }
-  else if (freqInMHZ >= 7.0 && freqInMHZ <= 7.2) {
+  else if (Frequency >= 700000 && Frequency <= 730000) {
     return 40;
   }
-  else if (freqInMHZ >= 10.1 && freqInMHZ <= 10.15) {
+  else if (Frequency >= 1000000 && Frequency <= 1030000) {
     return 30;
   }
-  else if (freqInMHZ >= 14.0 && freqInMHZ <= 14.35) {
+  else if (Frequency >= 1400000 && Frequency <= 1435000) {
     return 20;
   }
-  else if (freqInMHZ >= 18.06 && freqInMHZ <= 18.17) {
+  else if (Frequency >= 1800000 && Frequency <= 1817000) {
     return 17;
   }
-  else if (freqInMHZ >= 21.0 && freqInMHZ <= 21.45) {
+  else if (Frequency >= 2100000 && Frequency <= 2145000) {
     return 15;
   }
-  else if (freqInMHZ >= 24.89 && freqInMHZ <= 24.99) {
+  else if (Frequency >= 2489000 && Frequency <= 2500000) {
     return 12;
   }
-  else if (freqInMHZ >= 28.0 && freqInMHZ <= 29.7) {
+  else if (Frequency >= 2800000 && Frequency <= 3000000) {
     return 10;
   }
-  else if (freqInMHZ >= 50.0 && freqInMHZ <= 50.4) {
+  else if (Frequency >= 5000000 && Frequency <= 5040000) {
     return 6;
   }
-  else if (freqInMHZ >= 144.0 && freqInMHZ <= 146.0) {
+  else if (Frequency >= 14400000 && Frequency <= 14600000) {
     return 2;
   }
-  else if (freqInMHZ >= 430.0 && freqInMHZ <= 440.0) {
+  else if (Frequency >= 43000000 && Frequency <= 44000000) {
     return 430;
   }
   else {
     return 0;
   }
 }
-

@@ -81,7 +81,7 @@ Just open **UserSettings.h** and set *MY_RADIO* to the right value (HamSwitch ne
 const int MY_RADIO = 2;
 ```
 <br/>
-You may set the flag AUTO_DETECT_INTERFACE to true and let HamSwitch figure out which radio you use.
+You may set the flag AUTO_DETECT_INTERFACE to true and let HamSwitch figure out which interface to use.
 ```javascript
 const bool AUTO_DETECT_INTERFACE = true;
 ```

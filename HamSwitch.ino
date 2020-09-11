@@ -130,20 +130,32 @@ void setup() {
   PCMSK0 |= (1 << PCINT2); //Interrupt on pin10
   PCMSK0 |= (1 << PCINT3); //Interrupt on pin11
 
-  myRadio = GetMyRadio(); //Get a struct that represents a Radio (defined @ RadioSettings.h)
-
   radioSerial.begin(9600);
   Serial.begin(9600); // Open serial communications and wait for port to open:
   while (!Serial) {}
-  dispServe.Blink(1);
-  dispServe.Log11("HamSwitch v2.0", 0, 0, 0, 50);
-  dispServe.Log11("Radio: ", 0, 1, 0, 100);
-  dispServe.Log11(myRadio.displayname, 7, 1, 0, 200);
+  delay(100);
 
+  if (AUTO_DETECT_INTERFACE)
+  {
+    myRadio = GetInterface(&radioSerial); //try the different interfaces and select the one for the current radio
+    dispServe.Blink(1);
+    dispServe.Log11("HamSwitch v2.1", 0, 0, 0, 100);
+    dispServe.Log11("Interface: ", 0, 1, 0, 240);
+    dispServe.Log11(myRadio.displayname, 11, 1, 0, 300);
+  }
+  else
+  {
+    myRadio = GetMyRadio(); //Get a struct that represents a Radio (defined @ RadioSettings.h)
+    dispServe.Blink(1);
+    dispServe.Log11("HamSwitch v2.1", 0, 0, 0, 100);
+    dispServe.Log11("Radio: ", 0, 1, 0, 150);
+    dispServe.Log11(myRadio.displayname, 7, 1, 0, 300);
+  }
+  
   prevSelectedAntenna = -1; //initialize with out of range value for the first print
   GetFromMemory(); //get the value of the last antenna and the selection mode, before HamSwitch was switched off
 
-  delay(1000);
+  delay(2000);
 }
 
 void loop() {
@@ -173,7 +185,7 @@ void loop() {
     }
     else
     {
-      dispServe.Log("Manual Mode Only", 0, 0, 0);
+      dispServe.Log("Manual Mode", 0, 0, 0);
       analogWrite(AutoMode_GreenLED_PIN, 130); //Turn green led on
       analogWrite(AutoMode_RedLED_PIN, 0); //Turn red led off
     }

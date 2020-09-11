@@ -1,4 +1,4 @@
-//Select the radio number from the list
+//Select the radio identifier from the list
 /*
 FT817     101
 FT857     102
@@ -21,4 +21,18 @@ KX3       305
 SDR1000   401
 */
 
+
+/*
+ * true - the system will send the radio a set of frequency requests using all implemented interfaces
+ *        and determine the correct one according to the radio response
+ * 
+ * false - the user must set MY_RADIO flag with the correct radio identifier from the list
+ */
+const bool AUTO_DETECT_INTERFACE = true;
+
+
+/*
+ * this flag should hold the Radio identifier from the list
+ * if IS_AUTO_DETECT_INTERFACE is set to true, this flag will be ignored
+ */
 const int MY_RADIO = 104;

@@ -9,8 +9,8 @@ typedef unsigned long (*RadioResponse) (AltSoftSerial* serial);
 
 
 //********************************************************** Radio Implementations ******************************************************************//
-//************* 5 byte req/res *************
-void FT8X7_Request(AltSoftSerial* serial)
+//************* Y Interface *************
+void Y_Request(AltSoftSerial* serial)
 {
   byte ReadFreq[] = {0x00, 0x00, 0x00, 0x00, 0x03};
   for (byte i = 0; i < sizeof(ReadFreq); i++)
@@ -19,7 +19,7 @@ void FT8X7_Request(AltSoftSerial* serial)
   }
 }
 
-unsigned long FT8X7_Response(AltSoftSerial* serial)
+unsigned long Y_Response(AltSoftSerial* serial)
 {
   int i = 0;
   String response = "";
@@ -40,10 +40,10 @@ unsigned long FT8X7_Response(AltSoftSerial* serial)
   sscanf (&response[0], &pattern[0], &j);
   return j;
 }
-//***************** FA ******************
+//***************** FA Interface ******************
 void FA_Request(AltSoftSerial* serial)
 {
-  serial->print("FA;");
+  serial->write("FA;");
 }
 
 unsigned long FA_Response(AltSoftSerial* serial)
@@ -98,27 +98,29 @@ struct Radio {
 };
 
 //the supported radios at the moment
-Radio DummyRadio =      {-1,        (char*)"DUMMY RADIO", 0,              0             };
+Radio DummyRadio =        {-1,        (char*)"DUMMY RADIO",  0,           0          };
+Radio Generic_FA_Radio =  {1,         (char*)"FA",           FA_Request,  FA_Response};
+Radio Generic_Y_Radio =   {2,         (char*)"Y",            Y_Request,   Y_Response};
 
-Radio FT817_Radio =     {FT817,     (char*)"FT-817",      FT8X7_Request,  FT8X7_Response};
-Radio FT857_Radio =     {FT857,     (char*)"FT-857",      FT8X7_Request,  FT8X7_Response};
-Radio FT897_Radio =     {FT897,     (char*)"FT-897",      FT8X7_Request,  FT8X7_Response};
-Radio FT991_Radio =     {FT991,     (char*)"FT-991",      FA_Request,     FA_Response};
+Radio FT817_Radio =       {FT817,     (char*)"FT-817",       Y_Request,   Y_Response};
+Radio FT857_Radio =       {FT857,     (char*)"FT-857",       Y_Request,   Y_Response};
+Radio FT897_Radio =       {FT897,     (char*)"FT-897",       Y_Request,   Y_Response};
+Radio FT991_Radio =       {FT991,     (char*)"FT-991",       FA_Request,  FA_Response};
 
-Radio TS450_Radio =     {TS450,     (char*)"TS-450",      FA_Request,     FA_Response};
-Radio TS480_Radio =     {TS480,     (char*)"TS-480",      FA_Request,     FA_Response};
-Radio TS590_Radio =     {TS590,     (char*)"TS-590",      FA_Request,     FA_Response};
-Radio TS690_Radio =     {TS690,     (char*)"TS-690",      FA_Request,     FA_Response};
-Radio TS850_Radio =     {TS850,     (char*)"TS-850",      FA_Request,     FA_Response};
-Radio TS950_Radio =     {TS950,     (char*)"TS-950",      FA_Request,     FA_Response};
+Radio TS450_Radio =       {TS450,     (char*)"TS-450",       FA_Request,  FA_Response};
+Radio TS480_Radio =       {TS480,     (char*)"TS-480",       FA_Request,  FA_Response};
+Radio TS590_Radio =       {TS590,     (char*)"TS-590",       FA_Request,  FA_Response};
+Radio TS690_Radio =       {TS690,     (char*)"TS-690",       FA_Request,  FA_Response};
+Radio TS850_Radio =       {TS850,     (char*)"TS-850",       FA_Request,  FA_Response};
+Radio TS950_Radio =       {TS950,     (char*)"TS-950",       FA_Request,  FA_Response};
 
-Radio K2_Radio =        {K2,        (char*)"K2",          FA_Request,     FA_Response};
-Radio KX2_Radio =       {KX2,       (char*)"KX2",         FA_Request,     FA_Response};
-Radio K3S_Radio =       {K3S,       (char*)"K3S",         FA_Request,     FA_Response};
-Radio K3_Radio =        {K3,        (char*)"K3",          FA_Request,     FA_Response};
-Radio KX3_Radio =       {KX3,       (char*)"KX3",         FA_Request,     FA_Response};
+Radio K2_Radio =          {K2,        (char*)"K2",           FA_Request,  FA_Response};
+Radio KX2_Radio =         {KX2,       (char*)"KX2",          FA_Request,  FA_Response};
+Radio K3S_Radio =         {K3S,       (char*)"K3S",          FA_Request,  FA_Response};
+Radio K3_Radio =          {K3,        (char*)"K3",           FA_Request,  FA_Response};
+Radio KX3_Radio =         {KX3,       (char*)"KX3",          FA_Request,  FA_Response};
 
-Radio SDR1000_Radio =   {SDR1000,   (char*)"SDR-1000",    FA_Request,     FA_Response};
+Radio SDR1000_Radio =     {SDR1000,   (char*)"SDR-1000",     FA_Request,  FA_Response};
 
 
 
@@ -134,6 +136,27 @@ void InitRadioList()
   RadioList.push_back(TS480_Radio);
   RadioList.push_back(K2_Radio);
   RadioList.push_back(K3_Radio);
+}
+
+Radio GetInterface(AltSoftSerial* serial)
+{
+  //Tty "Y;" interface
+  Y_Request(serial);
+  delay(100);
+  unsigned long y = 0;
+  y = Y_Response(serial);
+  if (y > 10000)
+    return Generic_Y_Radio;
+    
+  //Tty "FA;" interface
+  FA_Request(serial);
+  delay(100);
+  unsigned long fa = 0;
+  fa = FA_Response(serial);
+  if (fa > 0)
+    return Generic_FA_Radio;  
+
+  return DummyRadio;
 }
 
 Radio GetMyRadio()

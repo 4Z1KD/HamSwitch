@@ -80,6 +80,11 @@ Just open **UserSettings.h** and set *MY_RADIO* to the right value (HamSwitch ne
 */
 const int MY_RADIO = 2;
 ```
+<br/>
+You may set the flag AUTO_DETECT_INTERFACE to true and let HamSwitch figure out which radio you use.
+```javascript
+const bool AUTO_DETECT_INTERFACE = true;
+```
 
 <h4>Setting the antenna list</h4>
 Antenna has 3 parameters:<br>
@@ -122,7 +127,7 @@ AntennaList[1] = new Antenna("1", ant1_BandList, "KLM34xa");
 Requirements and Analysis: **_Dubi, 4Z5DZ_**<br>
 Design and Code: **_Gil, 4Z1KD_**
 
-Latest Version: September 2018<br>
+Latest Version: September 2020<br>
 <script>
     var x = document.getElementsByClassName("button");
     x[0].outerHTML = '<img src="https://raw.githubusercontent.com/4Z1KD/HamSwitch/master/Images/HamSwitch.png" width="156px" style="position:absolute; top:-25px; right:-70px; background:transparent">'

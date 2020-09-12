@@ -7,8 +7,16 @@
 typedef void (*RadioRequest) (AltSoftSerial* serial);
 typedef unsigned long (*RadioResponse) (AltSoftSerial* serial);
 
+/************************************************************* Radio/Interface Implementations ******************************************************************
+    Every Radio may have a different CAT interface.
+    In reality, there are 3 major interfaces:
+    KENWOOD - FA interface
+    YAESU   - Y interface (5 bit request / response)
+    ICOM    - CI V
 
-//********************************************************** Radio Implementations ******************************************************************//
+    Most manufacturers use KENWOOD interface
+ ***************************************************************************************************************************************************************/
+
 //************* Y Interface *************
 void Y_Request(AltSoftSerial* serial)
 {
@@ -43,7 +51,7 @@ unsigned long Y_Response(AltSoftSerial* serial)
 //***************** FA Interface ******************
 void FA_Request(AltSoftSerial* serial)
 {
-  serial->write("FA;");
+  serial->println("FA;");
 }
 
 unsigned long FA_Response(AltSoftSerial* serial)
@@ -61,7 +69,7 @@ unsigned long FA_Response(AltSoftSerial* serial)
   unsigned long j = 0;
   String pattern = "FA%lu";
   sscanf (&response[0], &pattern[0], &j);
-  return j/10;
+  return j / 10;
 }
 //**************************************************************************************************************************************************//
 
@@ -88,7 +96,7 @@ const int SDR1000 =   401;
 
 /*
    This struct represents a radio.
-   It has an Id, and two callbacks for sending commands to the radio and receiving radio response
+   It has an Id, a friendly name, and two callbacks for sending commands to the radio and receiving radio response
 */
 struct Radio {
   int Id;
@@ -98,7 +106,7 @@ struct Radio {
 };
 
 //the supported radios at the moment
-Radio DummyRadio =        {-1,        (char*)"DUMMY RADIO",  0,           0          };
+Radio DummyRadio =        { -1,        (char*)"DUMMY RADIO",  0,           0          };
 Radio Generic_FA_Radio =  {1,         (char*)"FA",           FA_Request,  FA_Response};
 Radio Generic_Y_Radio =   {2,         (char*)"Y",            Y_Request,   Y_Response};
 
@@ -127,19 +135,39 @@ Radio SDR1000_Radio =     {SDR1000,   (char*)"SDR-1000",     FA_Request,  FA_Res
 
 SimpleList<Radio> RadioList; //a list that holds the supported radios
 
+/**********************************************************************************************************
+   IMPORTANT: uncomment the radio you want in the list (delete // at the begining of the row)
+ **********************************************************************************************************/
 void InitRadioList()
 {
+  //Arduino nano is limited to 14 radio memories
+  RadioList.reserve(14); // Pre-reserve the memory, so later the inserts and deletes will be much faster
+
+  //  RadioList.push_back(FT817_Radio);
   RadioList.push_back(FT857_Radio);
-  RadioList.push_back(FT897_Radio);
+  //  RadioList.push_back(FT897_Radio);
   RadioList.push_back(FT991_Radio);
-  RadioList.push_back(TS590_Radio);
-  RadioList.push_back(TS480_Radio);
-  RadioList.push_back(K2_Radio);
-  RadioList.push_back(K3_Radio);
+
+  //  RadioList.push_back(TS450_Radio);
+  //  RadioList.push_back(TS480_Radio);
+  //  RadioList.push_back(TS590_Radio);
+  //  RadioList.push_back(TS690_Radio);
+  //  RadioList.push_back(TS850_Radio);
+  //  RadioList.push_back(TS950_Radio);
+
+  //  RadioList.push_back(K2_Radio);
+  //  RadioList.push_back(KX2_Radio);
+  //  RadioList.push_back(K3S_Radio);
+  //  RadioList.push_back(K3_Radio);
+  //  RadioList.push_back(KX3_Radio);
+
+  //  RadioList.push_back(SDR1000_Radio);
 }
 
 Radio GetInterface(AltSoftSerial* serial)
 {
+  //TODO: figure out why it only works when Y is first and FA is second??
+  
   //Tty "Y;" interface
   Y_Request(serial);
   delay(100);
@@ -147,14 +175,14 @@ Radio GetInterface(AltSoftSerial* serial)
   y = Y_Response(serial);
   if (y > 10000)
     return Generic_Y_Radio;
-    
+
   //Tty "FA;" interface
   FA_Request(serial);
-  delay(100);
+  delay(500);
   unsigned long fa = 0;
   fa = FA_Response(serial);
   if (fa > 0)
-    return Generic_FA_Radio;  
+    return Generic_FA_Radio;
 
   return DummyRadio;
 }

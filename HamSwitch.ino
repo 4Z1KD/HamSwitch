@@ -35,7 +35,7 @@
 
 **License: This code is FREE for private use by Amateur Radio Operators<br>**
   Created: December 2016<br>
-  Last Update: September 2020<br>
+  Last Update: Feb 2021<br>
   Design and Code: **_Gil, 4Z1KD_** (by request from Dubi, 4Z5DZ)<br>
 **************************************************************************/
 
@@ -60,9 +60,9 @@ int ToggleModeSwitch_PIN = 2; //Only Pin 2 or Pin 3 allowed here!
 int EmergencyDummyLoadSwitch_PIN = 3; //Only Pin 2 or Pin 3 allowed here!
 
 //Define Decoder Pins (for Auto mode)
-int Decoder1_PIN_A0 = 4;
+int Decoder1_PIN_A0 = 6;
 int Decoder1_PIN_A1 = 5;
-int Decoder1_PIN_A2 = 6;
+int Decoder1_PIN_A2 = 4;
 
 //Pins 8 and 9 are used as Rx and Tx in AltSoftSerial to communicate with the radio
 
@@ -80,7 +80,10 @@ AltSoftSerial radioSerial; //a serial port to the radio (pins: 8-RX ,9-TX)
 unsigned long Frequency = 0; //The frequency after parsing
 unsigned long PreviousFrequency = -1; //The frequency after parsing
 
-byte prev_channel_value[2];
+bool lastStateCLK = LOW;
+bool currentStateCLK = LOW;
+bool DT_State = LOW;
+
 int selectedAntenna; //Holds the selected antenna, either in auto or manual mode
 int prevSelectedAntenna; //Holds the previously selected antenna - it is used to check if the antenna has changed and print only in this case
 bool isManualyAnttenaChanged = false;
@@ -126,9 +129,10 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(EmergencyDummyLoadSwitch_PIN), EmergencyDummyLoad, FALLING);
 
   //set the interrupt msk
-  PCICR |= (1 << PCIE0);
-  PCMSK0 |= (1 << PCINT2); //Interrupt on pin10
-  PCMSK0 |= (1 << PCINT3); //Interrupt on pin11
+  //PCICR |= (1 << PCIE0);
+  //PCMSK0 |= (1 << PCINT2); //Interrupt on pin10
+  //PCMSK0 |= (1 << PCINT3); //Interrupt on pin11
+  lastStateCLK = digitalRead(RotaryEncoder_PIN_CLK);
 
   radioSerial.begin(9600);
   Serial.begin(9600); // Open serial communications and wait for port to open:
@@ -151,11 +155,11 @@ void setup() {
     dispServe.Log11("Radio: ", 0, 1, 0, 150);
     dispServe.Log11(myRadio.displayname, 7, 1, 0, 300);
   }
-  
+
   prevSelectedAntenna = -1; //initialize with out of range value for the first print
   GetFromMemory(); //get the value of the last antenna and the selection mode, before HamSwitch was switched off
 
-  delay(2000);
+  delay(1000);
 }
 
 void loop() {
@@ -217,6 +221,7 @@ void loop() {
     SaveAntennaToMemory(selectedAntenna);
   }
   //----------------------------------------------------------------------------------------------------------//
+  updateEncoder();
 }
 
 
@@ -329,41 +334,29 @@ void EmergencyDummyLoad()
   last_EmergencyDummyLoadInterrupt_time = emergencyDummyLoadInterrupt_time;
 }
 
-ISR(PCINT0_vect) {
-  static unsigned long last_interrupt_time = 0;
-  unsigned long interrupt_time = millis();
-  // If interrupts come faster than 1ms, assume it's a bounce and ignore
-  if (interrupt_time - last_interrupt_time > 1)
+void  updateEncoder()
+{
+  currentStateCLK = digitalRead(RotaryEncoder_PIN_CLK);
+  if (currentStateCLK != lastStateCLK)
   {
-    //this methods find out which pin triggered the interrupt and what to do..
-    /***************** interupt on pin 10 *****************************/
-    //High to Low
-    if (prev_channel_value[0] == 1 && !(PINB & B00000100))
+    DT_State = digitalRead(RotaryEncoder_PIN_DT);
+    if (DT_State != currentStateCLK)
     {
-      prev_channel_value[0] = 0;
-      if (PINB & B00001000)
-      {
-        selectedAntenna++;
-        if (selectedAntenna == 8) selectedAntenna = 0;
-      }
-      else
-      {
-        selectedAntenna--;
-        if (selectedAntenna == -1) selectedAntenna = 7;
-      }
-      isManualyAnttenaChanged = true;
-      PreviousFrequency = -1;
-      isModeChanged = true;
-      IsAuto = false;
+      selectedAntenna++;
+      if (selectedAntenna == 8) selectedAntenna = 0;
     }
-    //Low to High - just save the new value - the selection only changes on High to Low interrupt.
-    else if (prev_channel_value[0] == 0 && PINB & B00000100)
-    {
-      prev_channel_value[0] = 1;
+    else {
+      selectedAntenna--;
+      if (selectedAntenna == -1) selectedAntenna = 7;
     }
+    lastStateCLK = currentStateCLK;
+    isManualyAnttenaChanged = true;
+    PreviousFrequency = -1;
+    isModeChanged = true;
+    IsAuto = false;
   }
-  last_interrupt_time = interrupt_time;
 }
+
 //************************************************* Display ************************************************************************//
 
 void DisplaySelectedAntenna(int antenna)

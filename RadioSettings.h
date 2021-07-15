@@ -1,4 +1,3 @@
-#include "Arduino.h"
 #include "UserSettings.h"
 #include <SimpleList.h>
 #include <AltSoftSerial.h>
@@ -106,7 +105,7 @@ struct Radio {
 };
 
 //the supported radios at the moment
-Radio DummyRadio =        { -1,        (char*)"DUMMY RADIO",  0,           0          };
+Radio DummyRadio =        { -1,        (char*)"---",  0,           0          };
 Radio Generic_FA_Radio =  {1,         (char*)"FA",           FA_Request,  FA_Response};
 Radio Generic_Y_Radio =   {2,         (char*)"Y",            Y_Request,   Y_Response};
 

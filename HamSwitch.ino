@@ -343,11 +343,11 @@ void  updateEncoder()
     if (DT_State != currentStateCLK)
     {
       selectedAntenna++;
-      if (selectedAntenna == 8) selectedAntenna = 0;
+      if (selectedAntenna == NUM_OF_ANTANNAS) selectedAntenna = 0;
     }
     else {
       selectedAntenna--;
-      if (selectedAntenna == -1) selectedAntenna = 7;
+      if (selectedAntenna == -1) selectedAntenna = NUM_OF_ANTANNAS-1;
     }
     lastStateCLK = currentStateCLK;
     isManualyAnttenaChanged = true;

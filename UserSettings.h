@@ -4,7 +4,7 @@
  * 
  * false - the user must set MY_RADIO flag with the correct radio identifier from the list
  */
-const bool AUTO_DETECT_INTERFACE = false;
+const bool AUTO_DETECT_INTERFACE = true;
 
 /*
  * this flag should hold the Radio identifier from the list

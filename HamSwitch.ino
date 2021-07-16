@@ -134,7 +134,7 @@ void setup() {
   //PCMSK0 |= (1 << PCINT3); //Interrupt on pin11
   lastStateCLK = digitalRead(RotaryEncoder_PIN_CLK);
 
-  radioSerial.begin(9600);
+  radioSerial.begin(BAUD_RATE);
   Serial.begin(9600); // Open serial communications and wait for port to open:
   while (!Serial) {}
   delay(100);
@@ -144,8 +144,8 @@ void setup() {
     myRadio = GetInterface(&radioSerial); //try the different interfaces and select the one for the current radio
     dispServe.Blink(1);
     dispServe.Log11("HamSwitch v2.1", 0, 0, 0, 100);
-    dispServe.Log11("Interface: ", 0, 1, 0, 240);
-    dispServe.Log11(myRadio.displayname, 11, 1, 0, 300);
+    dispServe.Log11("Interface: ", 0, 1, 0, 200);
+    dispServe.Log11(myRadio.displayname, 11, 1, 0, 250);
   }
   else
   {
@@ -233,6 +233,7 @@ void AutoAntennaSelector()
   {
     dispServe.Log("Non HAM Freq", 0, 0, 0);
     SwitchTo(0);
+    return;
   }
   else //if it is
   {
@@ -245,7 +246,7 @@ void AutoAntennaSelector()
         //if you find a match i.e. the antenna supports the selected band
         if (*itr == band)
         {
-          dispServe.Log(String(band) + "M Band", 0, 0, 0); //display the selected band
+          dispServe.Log(String(band) + "M   " + String(float(Frequency)/100000, 5), 0, 0, 0); //display the selected band
           SwitchTo(i); //and switch to that antenna
           return;
         }
@@ -431,6 +432,9 @@ int FrequencyToBand()
   }
   else if (Frequency >= 5000000 && Frequency <= 5040000) {
     return 6;
+  }
+  else if (Frequency >= 7000000 && Frequency <= 7050000) {
+    return 4;
   }
   else if (Frequency >= 14400000 && Frequency <= 14600000) {
     return 2;

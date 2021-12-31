@@ -118,7 +118,7 @@ AntennaList[1] = new Antenna("1", ant1_BandList, "KLM34xa");
 ```
 
 <h2>License</h2>
-**The project and the code is FREE for non commercial use by Amateur Radio Operators**<br>
+**FREE for non commercial use by Amateur Radio Operators**<br>
 
 <h2>Download</h2>
 <a href="https://github.com/4Z1KD/HamSwitch/archive/master.zip" target="_blank">Download HamSwitch</a>
